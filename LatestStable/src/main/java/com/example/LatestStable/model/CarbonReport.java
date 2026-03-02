@@ -19,11 +19,11 @@ public class CarbonReport {
 
 
     private String url;
-    private double totalPageSize;
-    private double co2PerVisitGrams;
-    private double co2PerYearKg;
-    private String carbonGrade;
-    private boolean greenHosted;
+    private double totalPageSizeKB; // KB m page size
+    private double co2PerVisitGrams; // grams Co2 per visit
+    private double co2PerYearKg;  // yearly Co2
+    private String carbonGrade;   // A+, A, B, C, D, E
+    private boolean greenHosted;  // Renewable energy pr host h
     private LocalDateTime scannedAt;
 
     @OneToMany(cascade = CascadeType.ALL)
