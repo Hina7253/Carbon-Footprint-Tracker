@@ -15,7 +15,7 @@ public class PageResources {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String url;
-    private String resourceType;
+    private String resourceType;   // IMAGE, SCRIPT, CSS, FONT, VIDEO, XHR
     private double sizeKB;
-    private double co2Contribution;
+    private double co2Contribution;  // is resource ka CO2 share
 }
