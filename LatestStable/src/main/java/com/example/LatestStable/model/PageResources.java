@@ -18,4 +18,7 @@ public class PageResources {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private WebsiteAnalysis websiteAnalysis;
+
+    @Column(length = 2048)
+    private String foundOnPage;
 }
