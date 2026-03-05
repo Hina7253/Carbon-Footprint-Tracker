@@ -1,15 +1,17 @@
 package com.example.LatestStable.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "page_resources")
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class PageResources {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
