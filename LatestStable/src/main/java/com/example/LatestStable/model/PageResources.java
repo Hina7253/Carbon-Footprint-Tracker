@@ -51,4 +51,12 @@ public class PageResources {
 
     @Column
     private Double optimizationPotential;
+
+    public void detectThirdParty(String baseDomain) {
+        if (this.resourceUrl == null || baseDomain == null) {
+            this.isThirdParty = false;
+            return;
+        }
+        this.isThirdParty = !this.resourceUrl.contains(baseDomain);
+    }
 }
