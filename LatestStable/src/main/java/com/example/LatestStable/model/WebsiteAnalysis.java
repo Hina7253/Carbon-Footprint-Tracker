@@ -28,5 +28,21 @@ public class WebsiteAnalysis {
     @Builder.Default
     private Integer crawlPages = 1;
 
+    @Column
+    private Long totalTransferBytes;
+
+    @Column
+    private Double co2PerVisitGrams;
+
+    @Column
+    private Double co2YearlyKg;
+
+    @Column
+    private Double energyUsageKwh;
+
+    @Column(length = 1)
+    private String grade;
+
+
 
 }
