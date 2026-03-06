@@ -21,4 +21,14 @@ public class PageResources {
 
     @Column(length = 2048)
     private String foundOnPage;
+
+    @Column(nullable = false, length = 2048)
+    private String resourceUrl;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ResourceType resourceType;
+
+    @Column
+    private Long sizeBytes;
 }
