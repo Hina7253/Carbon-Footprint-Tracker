@@ -31,4 +31,24 @@ public class PageResources {
 
     @Column
     private Long sizeBytes;
+
+    @Column
+    private Double co2ContributionGrams;
+
+    @Column
+    @Builder.Default
+    private Boolean isCached = false;
+
+    @Column
+    @Builder.Default
+    private Boolean isThirdParty = false;
+
+    @Column
+    private Integer httpStatus;
+
+    @Column(length = 255)
+    private String contentType;
+
+    @Column
+    private Double optimizationPotential;
 }
