@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -86,6 +87,38 @@ public class AnalysisResponseDTO {
         // { "IMAGE": { count: 24, totalBytes: 1234567 }, "SCRIPT": {...} }
         private Map<ResourceType, ResourceTypeBreakdown> breakdown;
     }
+
+    /**
+     * Statistics for one resource type (IMAGE, SCRIPT, etc.)
+     */
+    @Data
+    @Builder
+    public static class ResourceTypeBreakdown {
+        private ResourceType type;
+        private Integer count;
+        private Long totalBytes;
+        private String totalBytesFormatted;
+        private Double percentageOfTotal; // e.g., 65.4 (%)
+    }
+
+    **
+            * Details for a single "hotspot" resource.
+     * Shown in the top-heaviest-resources section of UI.
+            */
+    @Data
+    @Builder
+    public static class ResourceDetail {
+        private String url;
+        private ResourceType type;
+        private Long sizeBytes;
+        private String sizeFormatted;       // "1.2 MB"
+        private Double co2Grams;
+        private Boolean isThirdParty;
+        private Boolean isCached;
+        private Double optimizationPotential; // 0.0 to 1.0
+        private String optimizationTip;       // Short advice for this resource
+    }
+
 
 
 }
