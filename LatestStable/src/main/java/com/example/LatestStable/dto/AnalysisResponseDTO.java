@@ -1,10 +1,13 @@
 package com.example.LatestStable.dto;
+import com.example.LatestStable.dto.WebsiteAnalysis.AnalysisStatus;
 
+import com.example.LatestStable.model.ResourceType;
 import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -101,10 +104,7 @@ public class AnalysisResponseDTO {
         private Double percentageOfTotal; // e.g., 65.4 (%)
     }
 
-    **
-            * Details for a single "hotspot" resource.
-     * Shown in the top-heaviest-resources section of UI.
-            */
+
     @Data
     @Builder
     public static class ResourceDetail {
