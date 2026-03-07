@@ -119,6 +119,18 @@ public class AnalysisResponseDTO {
         private String optimizationTip;       // Short advice for this resource
     }
 
+    /**
+     * How does this site compare to benchmarks?
+     * Helps contextualize the results.
+     */
+    @Data
+    @Builder
+    public static class ComparisonData {
+        private Double averageWebsiteCo2Grams;   // Industry average: ~0.5g
+        private Double percentileBetter;          // "Better than 70% of websites"
+        private String performanceCategory;       // "Clean", "Average", "Dirty"
+    }
+
 
 
 }
