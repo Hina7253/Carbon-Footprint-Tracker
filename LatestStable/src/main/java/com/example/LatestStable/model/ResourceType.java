@@ -26,5 +26,28 @@ public enum ResourceType {
         return carbonMultiplier;
     }
 
+    public static ResourceType detectFromUrl(String url) {
+        if (url == null || url.isBlank()) return OTHER;
+
+        String lowerUrl = url.toLowerCase();
+
+        // Check for API calls first (subdomain patterns)
+        if (lowerUrl.contains("api.") || lowerUrl.contains("/api/")
+                || lowerUrl.contains("/v1/") || lowerUrl.contains("/v2/")) {
+            return API_CALL;
+        }
+
+        // Check file extensions
+        if (lowerUrl.matches(".*\\.(jpg|jpeg|png|gif|webp|svg|ico|avif).*")) return IMAGE;
+        if (lowerUrl.matches(".*\\.(mp4|webm|ogg|avi|mov|mkv).*"))           return VIDEO;
+        if (lowerUrl.matches(".*\\.(js|mjs|cjs).*"))                          return SCRIPT;
+        if (lowerUrl.matches(".*\\.(css).*"))                                  return STYLE;
+        if (lowerUrl.matches(".*\\.(woff|woff2|ttf|otf|eot).*"))              return FONT;
+        if (lowerUrl.matches(".*\\.(pdf|doc|docx|xls|xlsx).*"))               return DOCUMENT;
+        if (lowerUrl.matches(".*\\.(html|htm|php|asp|aspx).*"))               return HTML;
+
+        return OTHER;
+    }
+
 
 }
