@@ -14,7 +14,7 @@ public class PageResources {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "analysis_id", nullable = False)
+    @JoinColumn(name = "analysis_id", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private WebsiteAnalysis websiteAnalysis;
