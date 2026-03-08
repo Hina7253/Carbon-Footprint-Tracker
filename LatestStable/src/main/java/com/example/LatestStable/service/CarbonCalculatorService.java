@@ -1,6 +1,6 @@
 package com.example.LatestStable.service;
 
-import com.carbonscope.config.AppConfig.CarbonConstants;
+import com.example.LatestStable.config.AppConfig.CarbonConstants;
 import com.example.LatestStable.model.ResourceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
