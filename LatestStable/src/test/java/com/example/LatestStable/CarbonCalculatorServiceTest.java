@@ -14,7 +14,7 @@ class CarbonCalculatorServiceTest {
     // We just need to pass the CarbonConstants manually
     private final CarbonCalculatorService calculator =
             new CarbonCalculatorService(
-                    new com.carbonscope.config.AppConfig.CarbonConstants(
+                    new com.example.LatestStable.config.AppConfig.CarbonConstants(
                             0.06,  // kwhPerGb
                             490.0  // gramsCo2PerKwh
                     )
