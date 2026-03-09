@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -82,4 +84,15 @@ public class AnalysisService {
 
             String grade = carbonCalculatorService
                     .calculateGrade(co2PerVisit);
-}
+
+            // Step 5: Update analysis with results
+            analysis.setTotalTransferBytes(totalBytes);
+            analysis.setCo2PerVisitGrams(co2PerVisit);
+            analysis.setCo2YearlyKg(co2Yearly);
+            analysis.setEnergyUsageKwh(energyKwh);
+            analysis.setGrade(grade);
+            analysis.setStatus(AnalysisStatus.COMPLETED);
+            analysis.setCompletedAt(LocalDateTime.now());
+            analysis.setResources(resources);
+
+        }
