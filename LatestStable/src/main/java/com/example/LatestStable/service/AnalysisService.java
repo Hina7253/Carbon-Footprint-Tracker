@@ -58,4 +58,28 @@ public class AnalysisService {
                         baseDomain
                 );
             }
+
+            // Step 3: Save all resources to database
+            resourceRepository.saveAll(resources);
+
+            // Step 4: Calculate total metrics
+            long totalBytes = resources.stream()
+                    .filter(r -> r.getSizeBytes() != null)
+                    .mapToLong(PageResource::getSizeBytes)
+                    .sum();
+
+            double co2PerVisit = carbonCalculatorService
+                    .calculateCo2PerVisit(totalBytes);
+
+            double co2Yearly = carbonCalculatorService
+                    .calculateAnnualCo2Kg(
+                            co2PerVisit,
+                            analysis.getMonthlyVisits()
+                    );
+
+            double energyKwh = carbonCalculatorService
+                    .calculateEnergyKwh(totalBytes);
+
+            String grade = carbonCalculatorService
+                    .calculateGrade(co2PerVisit);
 }
