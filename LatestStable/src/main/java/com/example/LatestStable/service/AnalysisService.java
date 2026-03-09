@@ -32,4 +32,30 @@ public class AnalysisService {
                 .crawlPages(request.getCrawlPages())
                 .status(AnalysisStatus.PROCESSING)
                 .build();
+
+        analysis = analysisRepository.save(analysis);
+        log.info("Analysis created with ID: {}", analysis.getId());
+
+        try {
+            // Step 2: Crawl the website
+            String baseDomain = request.getBaseDomain();
+            List<PageResource> resources;
+
+            if (Boolean.TRUE.equals(request.getEnableCrawlMode())
+                    && request.getCrawlPages() > 1) {
+                // Multi-page crawl
+                resources = crawlerService.crawlMultiplePages(
+                        request.getNormalizedUrl(),
+                        analysis,
+                        baseDomain,
+                        request.getCrawlPages()
+                );
+            } else {
+                // Single page crawl
+                resources = crawlerService.crawlPage(
+                        request.getNormalizedUrl(),
+                        analysis,
+                        baseDomain
+                );
+            }
 }
