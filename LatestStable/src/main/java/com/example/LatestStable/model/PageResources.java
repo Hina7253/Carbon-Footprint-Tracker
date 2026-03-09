@@ -108,5 +108,9 @@ public class PageResources {
     public void setResourceType(ResourceType resourceType) {
 
     }
+
+    public boolean getSizeBytes() {
+        return false;
+    }
 }
 

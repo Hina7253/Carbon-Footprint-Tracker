@@ -72,4 +72,20 @@ public class AnalysisRequestDTO {
             return url;
         }
     }
+
+    public Object getUrl() {
+        return null;
+    }
+
+    public Object getMonthlyVisits() {
+        return null;
+    }
+
+    public int getCrawlPages() {
+        return 0;
+    }
+
+    public Boolean getEnableCrawlMode() {
+        return null;
+    }
 }

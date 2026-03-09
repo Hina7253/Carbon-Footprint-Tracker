@@ -115,12 +115,21 @@ public class WebsiteAnalysis {
     @Builder.Default
     private List<PageResources> resources = new ArrayList<>();
 
+    public static Object builder() {
+
+
+    }
+
     // ── LIFECYCLE CALLBACKS ───────────────────────────────────────
     // @PrePersist = Called automatically BEFORE saving to database
     // We use this to auto-set createdAt timestamp.
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
+    }
+
+    public Throwable getId() {
+        return null;
     }
 
     // ─────────────────────────────────────────────────────────────
