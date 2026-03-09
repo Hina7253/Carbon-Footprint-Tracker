@@ -52,6 +52,10 @@ public class PageResources {
     @Column
     private Double optimizationPotential;
 
+    public static Object builder() {
+        return null;
+    }
+
     public void detectThirdParty(String baseDomain) {
         if (this.resourceUrl == null || baseDomain == null) {
             this.isThirdParty = false;
@@ -59,4 +63,50 @@ public class PageResources {
         }
         this.isThirdParty = !this.resourceUrl.contains(baseDomain);
     }
+
+    public ResourceType getResourceType() {
+        return null;
+    }
+
+    public void setHttpStatus(int code) {
+    }
+
+    public void setSizeBytes(long sizeBytes) {
+    }
+
+    public void setCo2ContributionGrams(double co2) {
+    }
+
+    public void setOptimizationPotential(double potential) {
+    }
+
+    public void setContentType(String trim) {
+    }
+
+    public void setIsCached(boolean b) {
+    }
+
+    public boolean getIsCached() {
+        return false;
+    }
+
+    public String getContentType() {
+        return "";
+    }
+
+    public void setWebsiteAnalysis(WebsiteAnalysis analysis) {
+    }
+
+    public void setResourceUrl(String resourceUrl) {
+
+    }
+
+    public void setFoundOnPage(String foundOnPage) {
+
+    }
+
+    public void setResourceType(ResourceType resourceType) {
+
+    }
 }
+
