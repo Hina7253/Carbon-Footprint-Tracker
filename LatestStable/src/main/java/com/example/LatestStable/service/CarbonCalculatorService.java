@@ -114,10 +114,23 @@ public class CarbonCalculatorService {
         return 10.0;
     }
 
-    public record CarbonEquivalents(
-            double kmDriven,
-            double treesNeeded,
-            double smartphoneCharges,
-            double googleSearches
-    ) {}
+    public static class CarbonEquivalents {
+        private final double kmDriven;
+        private final double treesNeeded;
+        private final double smartphoneCharges;
+        private final double googleSearches;
+
+        public CarbonEquivalents(double kmDriven, double treesNeeded,
+                                 double smartphoneCharges, double googleSearches) {
+            this.kmDriven = kmDriven;
+            this.treesNeeded = treesNeeded;
+            this.smartphoneCharges = smartphoneCharges;
+            this.googleSearches = googleSearches;
+        }
+
+        public double kmDriven() { return kmDriven; }
+        public double treesNeeded() { return treesNeeded; }
+        public double smartphoneCharges() { return smartphoneCharges; }
+        public double googleSearches() { return googleSearches; }
+    }
 }
