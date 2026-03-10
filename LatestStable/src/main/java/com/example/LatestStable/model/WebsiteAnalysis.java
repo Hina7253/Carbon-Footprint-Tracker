@@ -132,6 +132,52 @@ public class WebsiteAnalysis {
         return null;
     }
 
+    public long getMonthlyVisits() {
+        return 0;
+    }
+
+    public void setTotalTransferBytes(long totalBytes) {
+    }
+
+    public void setCo2PerVisitGrams(double co2PerVisit) {
+    }
+
+    public void setCo2YearlyKg(double co2Yearly) {
+    }
+
+    public void setEnergyUsageKwh(double energyKwh) {
+    }
+
+    public void setGrade(String grade) {
+    }
+
+    public void setStatus(AnalysisStatus analysisStatus) {
+    }
+
+    public void setCompletedAt(LocalDateTime now) {
+    }
+
+    public void setResources(List<PageResources> resources) {
+    }
+
+    public void setErrorMessage(String message) {
+    }
+
+    public Double getCo2YearlyKg() {
+    }
+
+    public double getCo2PerVisitGrams() {
+    }
+
+    public Double getEnergyUsageKwh() {
+    }
+
+    public Object getWebsiteUrl() {
+    }
+
+    public Object getStatus() {
+    }
+
     // ─────────────────────────────────────────────────────────────
     // INNER ENUM: Analysis Status
     // Defined here since it's only used by this class

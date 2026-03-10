@@ -1,8 +1,9 @@
-// java
+
 package com.example.LatestStable.dto;
 
 import com.example.LatestStable.model.ResourceType;
 import com.example.LatestStable.model.WebsiteAnalysis;
+import jdk.jshell.Snippet;
 import lombok.Builder;
 import lombok.Data;
 
@@ -38,6 +39,9 @@ public class AnalysisResponseDTO {
     // How does this site compare to the average?
     private ComparisonData comparison;
 
+    public static Snippet builder() {
+    }
+
     @Data
     @Builder
     public static class CarbonMetrics {
@@ -45,6 +49,10 @@ public class AnalysisResponseDTO {
         private Double co2YearlyKg;
         private Double energyUsageKwh;
         private CarbonEquivalents equivalents;
+
+        public static Object builder() {
+            return null;
+        }
     }
 
     @Data
@@ -54,6 +62,10 @@ public class AnalysisResponseDTO {
         private Double treesNeeded;
         private Double smartphoneCharges;
         private Double googleSearches;
+
+        public static Object builder() {
+            return null;
+        }
     }
 
     @Data
