@@ -16,6 +16,8 @@ import java.util.concurrent.CompletableFuture;
 @Service
 @RequiredArgsConstructor
 public class ResourceFetcherService {
+    private static final org.slf4j.Logger log =
+            org.slf4j.LoggerFactory.getLogger(ResourceFetcherService.class);
 
     private final OkHttpClient okHttpClient;
     private final CarbonCalculatorService carbonCalculatorService;
