@@ -1,14 +1,12 @@
-
 package com.example.LatestStable.service;
 
 import com.example.LatestStable.model.PageResources;
 import com.example.LatestStable.model.WebsiteAnalysis;
-import com.example.LatestStable.service.ResourceFetcherService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,9 +20,11 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-public class WebCrawlerService {
 
-    private static final Logger log = LoggerFactory.getLogger(WebCrawlerService.class);
+@RequiredArgsConstructor
+public class WebCrawlerService {
+    private static final org.slf4j.Logger log =
+            org.slf4j.LoggerFactory.getLogger(WebCrawlerService.class);
 
     private final OkHttpClient okHttpClient;
     private final ResourceFetcherService resourceFetcherService;
@@ -50,7 +50,6 @@ public class WebCrawlerService {
             }
 
             Document doc = Jsoup.parse(html, pageUrl);
-
             Set<String> resourceUrls = extractAllResourceUrls(doc, pageUrl);
             log.info("Found {} resources on {}", resourceUrls.size(), pageUrl);
 
@@ -132,7 +131,7 @@ public class WebCrawlerService {
                             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
                                     "AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36")
                     .addHeader("Accept",
-                            "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+                            "text/html,application/xhtml+xml,*/*;q=0.8")
                     .build();
 
             try (Response response = okHttpClient.newCall(request).execute()) {
@@ -149,49 +148,45 @@ public class WebCrawlerService {
     private Set<String> extractAllResourceUrls(Document doc, String baseUrl) {
         Set<String> urls = new HashSet<>();
 
-        Elements images = doc.select("img[src]");
-        for (Element img : images) {
+        // Images
+        for (Element img : doc.select("img[src]")) {
             addUrl(urls, img.absUrl("src"));
         }
-
-        Elements srcsetImages = doc.select("img[srcset]");
-        for (Element img : srcsetImages) {
-            String srcset = img.attr("srcset");
-            parseSrcset(srcset, urls);
+        for (Element img : doc.select("img[srcset]")) {
+            parseSrcset(img.attr("srcset"), urls);
         }
 
-        Elements scripts = doc.select("script[src]");
-        for (Element script : scripts) {
+        // Scripts
+        for (Element script : doc.select("script[src]")) {
             addUrl(urls, script.absUrl("src"));
         }
 
-        Elements stylesheets = doc.select("link[rel=stylesheet]");
-        for (Element css : stylesheets) {
+        // CSS
+        for (Element css : doc.select("link[rel=stylesheet]")) {
             addUrl(urls, css.absUrl("href"));
         }
 
-        Elements fonts = doc.select("link[as=font]");
-        for (Element font : fonts) {
+        // Fonts
+        for (Element font : doc.select("link[as=font]")) {
             addUrl(urls, font.absUrl("href"));
         }
 
-        Elements videos = doc.select("video[src], source[src]");
-        for (Element video : videos) {
+        // Videos
+        for (Element video : doc.select("video[src], source[src]")) {
             addUrl(urls, video.absUrl("src"));
         }
 
-        Elements links = doc.select("link[href]");
-        for (Element link : links) {
+        // Favicons
+        for (Element link : doc.select("link[href]")) {
             String rel = link.attr("rel").toLowerCase();
             if (rel.contains("icon") || rel.contains("image")) {
                 addUrl(urls, link.absUrl("href"));
             }
         }
 
-        Elements styledElements = doc.select("[style*=url(]");
-        for (Element el : styledElements) {
-            String style = el.attr("style");
-            extractUrlsFromCss(style, baseUrl, urls);
+        // Background images in inline styles
+        for (Element el : doc.select("[style*=url(]")) {
+            extractUrlsFromCss(el.attr("style"), baseUrl, urls);
         }
 
         urls.remove("");
@@ -208,18 +203,15 @@ public class WebCrawlerService {
             if (html == null) return internalLinks;
 
             Document doc = Jsoup.parse(html, pageUrl);
-            Elements links = doc.select("a[href]");
 
-            for (Element link : links) {
+            for (Element link : doc.select("a[href]")) {
                 String href = link.absUrl("href");
 
                 if (href.contains(baseDomain)
                         && !href.contains("#")
                         && (href.startsWith("http://")
                         || href.startsWith("https://"))) {
-
-                    String cleanUrl = href.replaceAll("/$", "");
-                    internalLinks.add(cleanUrl);
+                    internalLinks.add(href.replaceAll("/$", ""));
                 }
             }
         } catch (Exception e) {
@@ -239,8 +231,7 @@ public class WebCrawlerService {
 
     private void parseSrcset(String srcset, Set<String> urls) {
         if (srcset == null || srcset.isBlank()) return;
-        String[] parts = srcset.split(",");
-        for (String part : parts) {
+        for (String part : srcset.split(",")) {
             String trimmed = part.trim().split("\\s+")[0];
             addUrl(urls, trimmed);
         }

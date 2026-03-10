@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class ResourceFetcherService {
 
