@@ -34,7 +34,6 @@ public class AnalysisService {
         this.carbonCalculatorService = carbonCalculatorService;
     }
 
-    // ── START ANALYSIS ────────────────────────────────────────────
     @Transactional
     public AnalysisResponseDTO startAnalysis(AnalysisRequestDTO request) {
 
@@ -113,7 +112,6 @@ public class AnalysisService {
         }
     }
 
-    // ── GET BY ID ─────────────────────────────────────────────────
     @Transactional(readOnly = true)
     public AnalysisResponseDTO getAnalysis(Long id) {
         WebsiteAnalysis analysis = analysisRepository.findById(id)
@@ -127,7 +125,6 @@ public class AnalysisService {
         return buildResponse(analysis, resources);
     }
 
-    // ── GET HISTORY ───────────────────────────────────────────────
     @Transactional(readOnly = true)
     public List<AnalysisResponseDTO> getHistory() {
         List<WebsiteAnalysis> analyses =
@@ -140,12 +137,11 @@ public class AnalysisService {
                 .collect(Collectors.toList());
     }
 
-    // ── BUILD RESPONSE ────────────────────────────────────────────
     private AnalysisResponseDTO buildResponse(
             WebsiteAnalysis analysis,
             List<PageResources> resources) {
 
-        // -- Carbon Equivalents --
+        // Carbon Equivalents
         AnalysisResponseDTO.CarbonEquivalents equivalents = null;
 
         if (analysis.getCo2YearlyKg() != null) {
@@ -153,16 +149,15 @@ public class AnalysisService {
                     carbonCalculatorService.calculateEquivalents(
                             analysis.getCo2YearlyKg()
                     );
-
             equivalents = AnalysisResponseDTO.CarbonEquivalents.builder()
-                    .wait(round(eq.kmDriven()))
+                    .kmDriven(round(eq.kmDriven()))
                     .treesNeeded(round(eq.treesNeeded()))
                     .smartphoneCharges(round(eq.smartphoneCharges()))
                     .googleSearches(round(eq.googleSearches()))
                     .build();
         }
 
-        // -- Carbon Metrics --
+        // Carbon Metrics
         AnalysisResponseDTO.CarbonMetrics carbonMetrics =
                 AnalysisResponseDTO.CarbonMetrics.builder()
                         .co2PerVisitGrams(round(analysis.getCo2PerVisitGrams()))
@@ -171,16 +166,17 @@ public class AnalysisService {
                         .equivalents(equivalents)
                         .build();
 
-        // -- Resource Breakdown --
-        Map<ResourceType, AnalysisResponseDTO.ResourceTypeBreakdown> breakdown =
+        // Resource Breakdown
+        Map<ResourceType,
+                AnalysisResponseDTO.ResourceTypeBreakdown> breakdown =
                 buildBreakdown(resources, analysis.getTotalTransferBytes());
 
-        // -- Third party count --
+        // Third party count
         long thirdPartyCount = resources.stream()
-                .filter(r -> Boolean.TRUE.equals(r.getIsThirdParty()))
+                .filter(r -> Boolean.TRUE.equals(r.isThirdParty()))
                 .count();
 
-        // -- Resource Summary --
+        // Resource Summary
         AnalysisResponseDTO.ResourceSummary resourceSummary =
                 AnalysisResponseDTO.ResourceSummary.builder()
                         .totalTransferBytes(analysis.getTotalTransferBytes())
@@ -191,7 +187,7 @@ public class AnalysisService {
                         .breakdown(breakdown)
                         .build();
 
-        // -- Top 5 Hotspots --
+        // Top 5 Hotspots
         List<AnalysisResponseDTO.ResourceDetail> hotspots = resources.stream()
                 .filter(r -> r.getSizeBytes() != null)
                 .sorted(Comparator.comparingLong(
@@ -200,7 +196,7 @@ public class AnalysisService {
                 .map(this::buildResourceDetail)
                 .collect(Collectors.toList());
 
-        // -- Comparison Data --
+        // Comparison Data
         AnalysisResponseDTO.ComparisonData comparison = null;
 
         if (analysis.getCo2PerVisitGrams() != null) {
@@ -216,7 +212,7 @@ public class AnalysisService {
         }
 
         return AnalysisResponseDTO.builder()
-                .id()
+                .id(analysis.getId())
                 .websiteUrl(analysis.getWebsiteUrl())
                 .status(analysis.getStatus())
                 .grade(analysis.getGrade())
@@ -230,7 +226,6 @@ public class AnalysisService {
                 .build();
     }
 
-    // ── HELPER: Breakdown by resource type ───────────────────────
     private Map<ResourceType, AnalysisResponseDTO.ResourceTypeBreakdown>
     buildBreakdown(List<PageResources> resources, Long totalBytes) {
 
@@ -241,8 +236,8 @@ public class AnalysisService {
                 .collect(Collectors.groupingBy(
                         PageResources::getResourceType));
 
-        for (Map.Entry<ResourceType, List<PageResources>> entry
-                : grouped.entrySet()) {
+        for (Map.Entry<ResourceType,
+                List<PageResources>> entry : grouped.entrySet()) {
 
             ResourceType type = entry.getKey();
             List<PageResources> typeResources = entry.getValue();
@@ -269,9 +264,8 @@ public class AnalysisService {
         return breakdown;
     }
 
-    // ── HELPER: Single resource detail ───────────────────────────
     private AnalysisResponseDTO.ResourceDetail buildResourceDetail(
-            PageResource resource) {
+            PageResources resource) {
 
         return AnalysisResponseDTO.ResourceDetail.builder()
                 .url(resource.getResourceUrl())
@@ -279,15 +273,14 @@ public class AnalysisService {
                 .sizeBytes(resource.getSizeBytes())
                 .sizeFormatted(formatBytes(resource.getSizeBytes()))
                 .co2Grams(round(resource.getCo2ContributionGrams()))
-                .isThirdParty(resource.getIsThirdParty())
-                .isCached(resource.getIsCached())
+                .isThirdParty(resource.isThirdParty())
+                .isCached(resource.isCached())
                 .optimizationPotential(resource.getOptimizationPotential())
                 .optimizationTip(
                         getOptimizationTip(resource.getResourceType()))
                 .build();
     }
 
-    // ── HELPER: Bytes to readable format ─────────────────────────
     private String formatBytes(Long bytes) {
         if (bytes == null) return "Unknown";
         if (bytes < 1024) return bytes + " B";
@@ -299,7 +292,6 @@ public class AnalysisService {
                 bytes / (1024.0 * 1024 * 1024));
     }
 
-    // ── HELPER: Optimization tip by type ─────────────────────────
     private String getOptimizationTip(ResourceType type) {
         return switch (type) {
             case IMAGE ->
@@ -319,8 +311,7 @@ public class AnalysisService {
         };
     }
 
-    // ── HELPER: Round to 4 decimal places ────────────────────────
-    private long round(Double value) {
+    private Double round(Double value) {
         if (value == null) return null;
         return Math.round(value * 10000.0) / 10000.0;
     }

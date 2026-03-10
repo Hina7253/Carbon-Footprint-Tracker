@@ -3,6 +3,7 @@ package com.example.LatestStable.dto;
 
 import com.example.LatestStable.model.ResourceType;
 import com.example.LatestStable.model.WebsiteAnalysis;
+import jakarta.annotation.sql.DataSourceDefinition;
 import jdk.jshell.Snippet;
 import lombok.Builder;
 import lombok.Data;
@@ -101,6 +102,10 @@ public class AnalysisResponseDTO {
         private Boolean isCached;
         private Double optimizationPotential;
         private String optimizationTip;
+
+        public static DataSourceDefinition builder() {
+            return null;
+        }
     }
 
     @Data

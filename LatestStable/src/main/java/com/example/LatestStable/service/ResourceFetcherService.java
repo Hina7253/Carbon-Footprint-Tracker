@@ -1,23 +1,22 @@
-// java
 package com.example.LatestStable.service;
 
 import com.example.LatestStable.model.PageResources;
 import com.example.LatestStable.model.ResourceType;
 import com.example.LatestStable.model.WebsiteAnalysis;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CompletableFuture;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class ResourceFetcherService {
-
-    private static final Logger log = LoggerFactory.getLogger(ResourceFetcherService.class);
 
     private final OkHttpClient okHttpClient;
     private final CarbonCalculatorService carbonCalculatorService;
@@ -34,11 +33,12 @@ public class ResourceFetcherService {
             String foundOnPage,
             String baseDomain) {
 
-        PageResources resource = new PageResources();
-        resource.setWebsiteAnalysis(analysis);
-        resource.setResourceUrl(resourceUrl);
-        resource.setFoundOnPage(foundOnPage);
-        resource.setResourceType(ResourceType.detectFromUrl(resourceUrl));
+        PageResources resource = PageResources.builder()
+                .websiteAnalysis(analysis)
+                .resourceUrl(resourceUrl)
+                .foundOnPage(foundOnPage)
+                .resourceType(ResourceType.detectFromUrl(resourceUrl))
+                .build();
 
         resource.detectThirdParty(baseDomain);
 
@@ -46,7 +46,8 @@ public class ResourceFetcherService {
             Request request = new Request.Builder()
                     .url(resourceUrl)
                     .head()
-                    .addHeader("User-Agent", "Mozilla/5.0 (compatible; CarbonScopeBot/1.0)")
+                    .addHeader("User-Agent",
+                            "Mozilla/5.0 (compatible; CarbonScopeBot/1.0)")
                     .build();
 
             try (Response response = okHttpClient.newCall(request).execute()) {
@@ -68,7 +69,7 @@ public class ResourceFetcherService {
                             .calculateOptimizationPotential(
                                     sizeBytes,
                                     resource.getResourceType(),
-                                    resource.getIsCached(),
+                                    resource.isCached(),
                                     resource.getContentType()
                             );
                     resource.setOptimizationPotential(potential);
@@ -76,7 +77,9 @@ public class ResourceFetcherService {
 
                 String contentType = response.header("Content-Type");
                 if (contentType != null) {
-                    resource.setContentType(contentType.split(";")[0].trim());
+                    resource.setContentType(
+                            contentType.split(";")[0].trim()
+                    );
                 }
 
                 String cacheControl = response.header("Cache-Control");
@@ -88,7 +91,8 @@ public class ResourceFetcherService {
             }
 
         } catch (Exception e) {
-            log.debug("Could not fetch resource: {} - {}", resourceUrl, e.getMessage());
+            log.debug("Could not fetch resource: {} - {}",
+                    resourceUrl, e.getMessage());
             resource.setHttpStatus(0);
         }
 

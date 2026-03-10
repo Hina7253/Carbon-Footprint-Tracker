@@ -109,11 +109,23 @@ public class PageResources {
 
     }
 
-    public boolean getSizeBytes() {
+    public long getSizeBytes() {
         return false;
     }
 
     public Boolean getIsThirdParty() {
+        return null;
+    }
+
+    public Object getOptimizationPotential() {
+        return null;
+
+    }
+
+    public Double getCo2ContributionGrams() {
+    }
+
+    public Object getResourceUrl() {
         return null;
     }
 }
