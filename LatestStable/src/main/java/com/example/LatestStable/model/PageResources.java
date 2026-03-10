@@ -123,10 +123,26 @@ public class PageResources {
     }
 
     public Double getCo2ContributionGrams() {
+        return 0.0;
     }
 
     public Object getResourceUrl() {
         return null;
+    }
+    public boolean isThirdParty() {
+        return Boolean.TRUE.equals(this.isThirdParty);
+    }
+
+    public boolean isCached() {
+        return Boolean.TRUE.equals(this.isCached);
+    }
+
+    public void setIsCached(Boolean isCached) {
+        this.isCached = isCached;
+    }
+
+    public void setIsThirdParty(Boolean isThirdParty) {
+        this.isThirdParty = isThirdParty;
     }
 }
 

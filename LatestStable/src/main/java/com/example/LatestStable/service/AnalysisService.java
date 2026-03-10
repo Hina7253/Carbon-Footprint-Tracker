@@ -18,9 +18,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
+
 @RequiredArgsConstructor
 public class AnalysisService {
+    private static final org.slf4j.Logger log =
+            org.slf4j.LoggerFactory.getLogger(AnalysisService.class);
 
     private final WebsiteAnalysisRepository analysisRepository;
     private final PageResourcesRepository resourceRepository;
