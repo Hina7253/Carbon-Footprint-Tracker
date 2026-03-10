@@ -21,6 +21,24 @@ import java.util.stream.Collectors;
 
 
 public class AnalysisService {
+    private static final org.slf4j.Logger log =
+            org.slf4j.LoggerFactory.getLogger(AnalysisService.class);
+
+    private final WebsiteAnalysisRepository analysisRepository;
+    private final PageResourcesRepository resourceRepository;
+    private final WebCrawlerService crawlerService;
+    private final CarbonCalculatorService carbonCalculatorService;
+
+    public AnalysisService(
+            WebsiteAnalysisRepository analysisRepository,
+            PageResourcesRepository resourceRepository,
+            WebCrawlerService crawlerService,
+            CarbonCalculatorService carbonCalculatorService) {
+        this.analysisRepository = analysisRepository;
+        this.resourceRepository = resourceRepository;
+        this.crawlerService = crawlerService;
+        this.carbonCalculatorService = carbonCalculatorService;
+    }
 
 
     @Transactional
