@@ -1,22 +1,17 @@
 package com.example.LatestStable.model;
 
 import jakarta.persistence.*;
-import lombok.*;
 
 @Entity
 @Table(name = "page_resources")
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class PageResources {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "analysis_id", nullable = false)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     private WebsiteAnalysis websiteAnalysis;
 
     @Column(length = 2048)
@@ -29,6 +24,9 @@ public class PageResources {
     @Column(nullable = false)
     private ResourceType resourceType;
 
+    // ── Long wrapper (NOT primitive long) ─────────────────────────
+    // Long = nullable,  long = primitive (can't be null)
+    // We need Long so we can check: if (sizeBytes != null)
     @Column
     private Long sizeBytes;
 
@@ -36,11 +34,9 @@ public class PageResources {
     private Double co2ContributionGrams;
 
     @Column
-    @Builder.Default
     private Boolean isCached = false;
 
     @Column
-    @Builder.Default
     private Boolean isThirdParty = false;
 
     @Column
@@ -52,10 +48,45 @@ public class PageResources {
     @Column
     private Double optimizationPotential;
 
-    public static Object builder() {
-        return null;
+    // ── CONSTRUCTORS ──────────────────────────────────────────────
+    public PageResources() {}
+
+    private PageResources(Builder builder) {
+        this.websiteAnalysis  = builder.websiteAnalysis;
+        this.resourceUrl      = builder.resourceUrl;
+        this.foundOnPage      = builder.foundOnPage;
+        this.resourceType     = builder.resourceType;
+        this.isCached         = false;
+        this.isThirdParty     = false;
     }
 
+    // ── BUILDER ───────────────────────────────────────────────────
+    public static Builder builder() { return new Builder(); }
+
+    public static class Builder {
+        private WebsiteAnalysis websiteAnalysis;
+        private String resourceUrl;
+        private String foundOnPage;
+        private ResourceType resourceType;
+
+        public Builder websiteAnalysis(WebsiteAnalysis v) {
+            this.websiteAnalysis = v; return this;
+        }
+        public Builder resourceUrl(String v) {
+            this.resourceUrl = v; return this;
+        }
+        public Builder foundOnPage(String v) {
+            this.foundOnPage = v; return this;
+        }
+        public Builder resourceType(ResourceType v) {
+            this.resourceType = v; return this;
+        }
+        public PageResources build() {
+            return new PageResources(this);
+        }
+    }
+
+    // ── HELPER METHOD ─────────────────────────────────────────────
     public void detectThirdParty(String baseDomain) {
         if (this.resourceUrl == null || baseDomain == null) {
             this.isThirdParty = false;
@@ -64,85 +95,39 @@ public class PageResources {
         this.isThirdParty = !this.resourceUrl.contains(baseDomain);
     }
 
-    public ResourceType getResourceType() {
-        return null;
-    }
+    // ── GETTERS ───────────────────────────────────────────────────
+    public Long getId() { return id; }
+    public WebsiteAnalysis getWebsiteAnalysis() { return websiteAnalysis; }
+    public String getFoundOnPage() { return foundOnPage; }
+    public String getResourceUrl() { return resourceUrl; }
+    public ResourceType getResourceType() { return resourceType; }
+    public Long getSizeBytes() { return sizeBytes; }
+    public Double getCo2ContributionGrams() { return co2ContributionGrams; }
+    public Boolean getIsCached() { return isCached; }
+    public Boolean getIsThirdParty() { return isThirdParty; }
+    public Integer getHttpStatus() { return httpStatus; }
+    public String getContentType() { return contentType; }
+    public Double getOptimizationPotential() { return optimizationPotential; }
 
-    public void setHttpStatus(int code) {
-    }
-
-    public void setSizeBytes(long sizeBytes) {
-    }
-
-    public void setCo2ContributionGrams(double co2) {
-    }
-
-    public void setOptimizationPotential(double potential) {
-    }
-
-    public void setContentType(String trim) {
-    }
-
-    public void setIsCached(boolean b) {
-    }
-
-    public boolean getIsCached() {
-        return false;
-    }
-
-    public String getContentType() {
-        return "";
-    }
-
-    public void setWebsiteAnalysis(WebsiteAnalysis analysis) {
-    }
-
-    public void setResourceUrl(String resourceUrl) {
-
-    }
-
-    public void setFoundOnPage(String foundOnPage) {
-
-    }
-
-    public void setResourceType(ResourceType resourceType) {
-
-    }
-
-    public long getSizeBytes() {
-        return false;
-    }
-
-    public Boolean getIsThirdParty() {
-        return null;
-    }
-
-    public Object getOptimizationPotential() {
-        return null;
-
-    }
-
-    public Double getCo2ContributionGrams() {
-        return 0.0;
-    }
-
-    public Object getResourceUrl() {
-        return null;
+    // Boolean helpers
+    public boolean isCached() {
+        return Boolean.TRUE.equals(this.isCached);
     }
     public boolean isThirdParty() {
         return Boolean.TRUE.equals(this.isThirdParty);
     }
 
-    public boolean isCached() {
-        return Boolean.TRUE.equals(this.isCached);
-    }
-
-    public void setIsCached(Boolean isCached) {
-        this.isCached = isCached;
-    }
-
-    public void setIsThirdParty(Boolean isThirdParty) {
-        this.isThirdParty = isThirdParty;
-    }
+    // ── SETTERS ───────────────────────────────────────────────────
+    public void setId(Long id) { this.id = id; }
+    public void setWebsiteAnalysis(WebsiteAnalysis v) { this.websiteAnalysis = v; }
+    public void setFoundOnPage(String v) { this.foundOnPage = v; }
+    public void setResourceUrl(String v) { this.resourceUrl = v; }
+    public void setResourceType(ResourceType v) { this.resourceType = v; }
+    public void setSizeBytes(Long v) { this.sizeBytes = v; }
+    public void setCo2ContributionGrams(Double v) { this.co2ContributionGrams = v; }
+    public void setIsCached(Boolean v) { this.isCached = v; }
+    public void setIsThirdParty(Boolean v) { this.isThirdParty = v; }
+    public void setHttpStatus(Integer v) { this.httpStatus = v; }
+    public void setContentType(String v) { this.contentType = v; }
+    public void setOptimizationPotential(Double v) { this.optimizationPotential = v; }
 }
-
