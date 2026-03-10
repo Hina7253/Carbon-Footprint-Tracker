@@ -1,2 +1,2 @@
-## Carbon FootPrint Tracker(for
+## Carbon FootPrint Tracker(for websites
 
