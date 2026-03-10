@@ -164,18 +164,43 @@ public class WebsiteAnalysis {
     }
 
     public Double getCo2YearlyKg() {
+        return 0.0;
     }
 
     public double getCo2PerVisitGrams() {
+        return 0;
     }
 
     public Double getEnergyUsageKwh() {
+        return 0.0;
     }
 
     public Object getWebsiteUrl() {
+        return null;
     }
 
     public Object getStatus() {
+        return null;
+    }
+
+    public Long getTotalTransferBytes() {
+        return 0L;
+    }
+
+    public Object getGrade() {
+        return null;
+    }
+
+    public Object getCompletedAt() {
+        return null;
+    }
+
+    public Object getErrorMessage() {
+        return null;
+    }
+
+    public Object getAiSuggestions() {
+        return null;
     }
 
     // ─────────────────────────────────────────────────────────────

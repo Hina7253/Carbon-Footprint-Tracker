@@ -40,6 +40,7 @@ public class AnalysisResponseDTO {
     private ComparisonData comparison;
 
     public static Snippet builder() {
+        return null;
     }
 
     @Data

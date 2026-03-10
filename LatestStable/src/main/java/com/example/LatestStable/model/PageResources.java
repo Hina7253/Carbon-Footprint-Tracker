@@ -112,5 +112,9 @@ public class PageResources {
     public boolean getSizeBytes() {
         return false;
     }
+
+    public Boolean getIsThirdParty() {
+        return null;
+    }
 }
 
