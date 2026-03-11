@@ -48,7 +48,7 @@ public class AnalysisService {
 
         WebsiteAnalysis analysis = WebsiteAnalysis.builder()
                 .websiteUrl(request.getNormalizedUrl())
-                .monthlyVisits(request.getMonthlyVisits())
+                .monthlyVisits((Long) request.getMonthlyVisits())
                 .crawlPages(request.getCrawlPages())
                 .status(AnalysisStatus.PROCESSING)
                 .build();
