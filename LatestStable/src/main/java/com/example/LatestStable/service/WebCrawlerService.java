@@ -2,8 +2,6 @@ package com.example.LatestStable.service;
 
 import com.example.LatestStable.model.PageResources;
 import com.example.LatestStable.model.WebsiteAnalysis;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -13,24 +11,22 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-
-@RequiredArgsConstructor
 public class WebCrawlerService {
+
     private static final org.slf4j.Logger log =
             org.slf4j.LoggerFactory.getLogger(WebCrawlerService.class);
 
     private final OkHttpClient okHttpClient;
     private final ResourceFetcherService resourceFetcherService;
 
-    public WebCrawlerService(OkHttpClient okHttpClient, ResourceFetcherService resourceFetcherService) {
-        this.okHttpClient = okHttpClient;
+    public WebCrawlerService(
+            OkHttpClient okHttpClient,
+            ResourceFetcherService resourceFetcherService) {
+        this.okHttpClient          = okHttpClient;
         this.resourceFetcherService = resourceFetcherService;
     }
 
@@ -44,38 +40,34 @@ public class WebCrawlerService {
 
         try {
             String html = fetchHtml(pageUrl);
-            if (html == null) {
-                log.warn("Could not fetch HTML for: {}", pageUrl);
-                return resources;
-            }
+            if (html == null) return resources;
 
             Document doc = Jsoup.parse(html, pageUrl);
-            Set<String> resourceUrls = extractAllResourceUrls(doc, pageUrl);
-            log.info("Found {} resources on {}", resourceUrls.size(), pageUrl);
+            Set<String> resourceUrls =
+                    extractAllResourceUrls(doc, pageUrl);
+            log.info("Found {} resources on {}",
+                    resourceUrls.size(), pageUrl);
 
-            List<CompletableFuture<PageResources>> futures = new ArrayList<>();
+            List<CompletableFuture<PageResources>> futures =
+                    new ArrayList<>();
 
             for (String resourceUrl : resourceUrls) {
-                CompletableFuture<PageResources> future =
+                futures.add(
                         resourceFetcherService.fetchResourceDetails(
-                                resourceUrl,
-                                analysis,
-                                pageUrl,
-                                baseDomain
-                        );
-                futures.add(future);
+                                resourceUrl, analysis, pageUrl, baseDomain)
+                );
             }
 
             CompletableFuture.allOf(
                     futures.toArray(new CompletableFuture[0])
             ).join();
 
-            for (CompletableFuture<PageResources> future : futures) {
-                resources.add(future.get());
+            for (CompletableFuture<PageResources> f : futures) {
+                resources.add(f.get());
             }
 
         } catch (Exception e) {
-            log.error("Error crawling page {}: {}", pageUrl, e.getMessage());
+            log.error("Error crawling {}: {}", pageUrl, e.getMessage());
         }
 
         return resources;
@@ -87,37 +79,31 @@ public class WebCrawlerService {
             String baseDomain,
             int maxPages) {
 
-        List<PageResources> allResources = new ArrayList<>();
-        Set<String> visitedPages = new HashSet<>();
-        List<String> pagesToVisit = new ArrayList<>();
+        List<PageResources> allResources  = new ArrayList<>();
+        Set<String> visitedPages          = new HashSet<>();
+        List<String> pagesToVisit         = new ArrayList<>();
         pagesToVisit.add(startUrl);
-
         int pagesVisited = 0;
 
         while (!pagesToVisit.isEmpty() && pagesVisited < maxPages) {
             String currentPage = pagesToVisit.remove(0);
-
             if (visitedPages.contains(currentPage)) continue;
             visitedPages.add(currentPage);
             pagesVisited++;
 
-            List<PageResources> pageResources =
-                    crawlPage(currentPage, analysis, baseDomain);
-            allResources.addAll(pageResources);
+            allResources.addAll(
+                    crawlPage(currentPage, analysis, baseDomain));
 
             if (pagesVisited < maxPages) {
-                List<String> internalLinks =
-                        findInternalLinks(currentPage, baseDomain);
-
-                for (String link : internalLinks) {
-                    if (!visitedPages.contains(link)) {
+                for (String link :
+                        findInternalLinks(currentPage, baseDomain)) {
+                    if (!visitedPages.contains(link))
                         pagesToVisit.add(link);
-                    }
                 }
             }
         }
 
-        log.info("Crawled {} pages, found {} total resources",
+        log.info("Crawled {} pages, {} total resources",
                 pagesVisited, allResources.size());
         return allResources;
     }
@@ -129,128 +115,91 @@ public class WebCrawlerService {
                     .get()
                     .addHeader("User-Agent",
                             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
-                                    "AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36")
-                    .addHeader("Accept",
-                            "text/html,application/xhtml+xml,*/*;q=0.8")
+                                    "AppleWebKit/537.36 Chrome/120.0.0.0")
                     .build();
 
-            try (Response response = okHttpClient.newCall(request).execute()) {
-                if (response.isSuccessful() && response.body() != null) {
+            try (Response response =
+                         okHttpClient.newCall(request).execute()) {
+                if (response.isSuccessful() && response.body() != null)
                     return response.body().string();
-                }
             }
         } catch (Exception e) {
-            log.error("Error fetching HTML from {}: {}", url, e.getMessage());
+            log.error("Error fetching {}: {}", url, e.getMessage());
         }
         return null;
     }
 
-    private Set<String> extractAllResourceUrls(Document doc, String baseUrl) {
+    private Set<String> extractAllResourceUrls(
+            Document doc, String baseUrl) {
+
         Set<String> urls = new HashSet<>();
 
-        // Images
-        for (Element img : doc.select("img[src]")) {
-            addUrl(urls, img.absUrl("src"));
+        for (Element e : doc.select("img[src]"))
+            addUrl(urls, e.absUrl("src"));
+        for (Element e : doc.select("img[srcset]"))
+            parseSrcset(e.attr("srcset"), urls);
+        for (Element e : doc.select("script[src]"))
+            addUrl(urls, e.absUrl("src"));
+        for (Element e : doc.select("link[rel=stylesheet]"))
+            addUrl(urls, e.absUrl("href"));
+        for (Element e : doc.select("link[as=font]"))
+            addUrl(urls, e.absUrl("href"));
+        for (Element e : doc.select("video[src],source[src]"))
+            addUrl(urls, e.absUrl("src"));
+        for (Element e : doc.select("link[href]")) {
+            String rel = e.attr("rel").toLowerCase();
+            if (rel.contains("icon") || rel.contains("image"))
+                addUrl(urls, e.absUrl("href"));
         }
-        for (Element img : doc.select("img[srcset]")) {
-            parseSrcset(img.attr("srcset"), urls);
-        }
-
-        // Scripts
-        for (Element script : doc.select("script[src]")) {
-            addUrl(urls, script.absUrl("src"));
-        }
-
-        // CSS
-        for (Element css : doc.select("link[rel=stylesheet]")) {
-            addUrl(urls, css.absUrl("href"));
-        }
-
-        // Fonts
-        for (Element font : doc.select("link[as=font]")) {
-            addUrl(urls, font.absUrl("href"));
-        }
-
-        // Videos
-        for (Element video : doc.select("video[src], source[src]")) {
-            addUrl(urls, video.absUrl("src"));
-        }
-
-        // Favicons
-        for (Element link : doc.select("link[href]")) {
-            String rel = link.attr("rel").toLowerCase();
-            if (rel.contains("icon") || rel.contains("image")) {
-                addUrl(urls, link.absUrl("href"));
-            }
-        }
-
-        // Background images in inline styles
-        for (Element el : doc.select("[style*=url(]")) {
-            extractUrlsFromCss(el.attr("style"), baseUrl, urls);
-        }
+        for (Element e : doc.select("[style*=url(]"))
+            extractUrlsFromCss(e.attr("style"), baseUrl, urls);
 
         urls.remove("");
-        urls.remove(null);
-
         return urls;
     }
 
-    private List<String> findInternalLinks(String pageUrl, String baseDomain) {
-        List<String> internalLinks = new ArrayList<>();
+    private List<String> findInternalLinks(
+            String pageUrl, String baseDomain) {
 
+        List<String> links = new ArrayList<>();
         try {
             String html = fetchHtml(pageUrl);
-            if (html == null) return internalLinks;
-
+            if (html == null) return links;
             Document doc = Jsoup.parse(html, pageUrl);
-
-            for (Element link : doc.select("a[href]")) {
-                String href = link.absUrl("href");
-
+            for (Element a : doc.select("a[href]")) {
+                String href = a.absUrl("href");
                 if (href.contains(baseDomain)
                         && !href.contains("#")
-                        && (href.startsWith("http://")
-                        || href.startsWith("https://"))) {
-                    internalLinks.add(href.replaceAll("/$", ""));
-                }
+                        && href.startsWith("http"))
+                    links.add(href.replaceAll("/$", ""));
             }
         } catch (Exception e) {
-            log.debug("Error finding internal links: {}", e.getMessage());
+            log.debug("Error finding links: {}", e.getMessage());
         }
-
-        return internalLinks;
+        return links;
     }
 
     private void addUrl(Set<String> urls, String url) {
-        if (url != null && !url.isBlank()
-                && (url.startsWith("http://")
-                || url.startsWith("https://"))) {
+        if (url != null && !url.isBlank() && url.startsWith("http"))
             urls.add(url.split("\\?")[0]);
-        }
     }
 
     private void parseSrcset(String srcset, Set<String> urls) {
         if (srcset == null || srcset.isBlank()) return;
-        for (String part : srcset.split(",")) {
-            String trimmed = part.trim().split("\\s+")[0];
-            addUrl(urls, trimmed);
-        }
+        for (String part : srcset.split(","))
+            addUrl(urls, part.trim().split("\\s+")[0]);
     }
 
     private void extractUrlsFromCss(
             String css, String baseUrl, Set<String> urls) {
         if (css == null) return;
-        java.util.regex.Pattern pattern =
-                java.util.regex.Pattern.compile(
-                        "url\\(['\"]?([^'\"\\)]+)['\"]?\\)"
-                );
-        java.util.regex.Matcher matcher = pattern.matcher(css);
+        var pattern = java.util.regex.Pattern.compile(
+                "url\\(['\"]?([^'\"\\)]+)['\"]?\\)");
+        var matcher = pattern.matcher(css);
         while (matcher.find()) {
             String url = matcher.group(1);
             if (!url.startsWith("data:")) {
-                if (!url.startsWith("http")) {
-                    url = baseUrl + "/" + url;
-                }
+                if (!url.startsWith("http")) url = baseUrl + "/" + url;
                 addUrl(urls, url);
             }
         }
