@@ -2,34 +2,26 @@ package com.example.LatestStable.service;
 
 import com.example.LatestStable.config.AppConfig.CarbonConstants;
 import com.example.LatestStable.model.ResourceType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CarbonCalculatorService {
 
-    private static final Logger log = LoggerFactory.getLogger(CarbonCalculatorService.class);
+    private static final org.slf4j.Logger log =
+            org.slf4j.LoggerFactory.getLogger(CarbonCalculatorService.class);
 
-    // Spring injects this bean (defined in AppConfig)
     private final CarbonConstants carbonConstants;
 
-    // proper constructor assignment
     public CarbonCalculatorService(CarbonConstants carbonConstants) {
         this.carbonConstants = carbonConstants;
     }
 
-    // Industry average for comparison
-    private static final double AVERAGE_PAGE_CO2_GRAMS = 0.5;
-
     public double calculateCo2PerVisit(long totalBytes) {
         double gigabytes = totalBytes / 1_000_000_000.0;
         double energyKwh = gigabytes * carbonConstants.kwhPerGb();
-        double co2Grams = energyKwh * carbonConstants.gramsCo2PerKwh();
-
-        log.debug("Carbon calc: {}B → {}GB → {}kWh → {}gCO2",
-                totalBytes, gigabytes, energyKwh, co2Grams);
-
+        double co2Grams  = energyKwh * carbonConstants.gramsCo2PerKwh();
+        log.debug("Carbon calc: {}B → {}kWh → {}gCO2",
+                totalBytes, energyKwh, co2Grams);
         return co2Grams;
     }
 
@@ -38,19 +30,16 @@ public class CarbonCalculatorService {
         return gigabytes * carbonConstants.kwhPerGb();
     }
 
-    public double calculateAnnualCo2Kg(double co2PerVisitGrams, long monthlyVisits) {
-        long annualVisits = monthlyVisits * 12;
-        double annualCo2Grams = co2PerVisitGrams * annualVisits;
-        double annualCo2Kg = annualCo2Grams / 1000.0;
-
-        log.debug("Annual CO2: {}g/visit × {} visits = {}kg/year",
-                co2PerVisitGrams, annualVisits, annualCo2Kg);
-
-        return annualCo2Kg;
+    public double calculateAnnualCo2Kg(
+            double co2PerVisitGrams, long monthlyVisits) {
+        long annualVisits       = monthlyVisits * 12;
+        double annualCo2Grams   = co2PerVisitGrams * annualVisits;
+        return annualCo2Grams / 1000.0;
     }
 
-    public double calculateResourceCo2(long sizeBytes, ResourceType resourceType) {
-        double baseCo2 = calculateCo2PerVisit(sizeBytes);
+    public double calculateResourceCo2(
+            long sizeBytes, ResourceType resourceType) {
+        double baseCo2    = calculateCo2PerVisit(sizeBytes);
         double multiplier = resourceType.getCarbonMultiplier();
         return baseCo2 * multiplier;
     }
@@ -74,7 +63,8 @@ public class CarbonCalculatorService {
     }
 
     public double calculateOptimizationPotential(
-            long sizeBytes, ResourceType type, boolean isCached, String contentType) {
+            long sizeBytes, ResourceType type,
+            boolean isCached, String contentType) {
 
         if (isCached) return 0.1;
 
@@ -85,17 +75,15 @@ public class CarbonCalculatorService {
                 if (sizeBytes > 50_000)  yield 0.3;
                 yield 0.1;
             }
-            case VIDEO -> sizeBytes > 1_000_000 ? 0.4 : 0.2;
+            case VIDEO  -> sizeBytes > 1_000_000 ? 0.4 : 0.2;
             case SCRIPT -> {
-                if (contentType != null && contentType.contains("javascript")) {
-                    if (sizeBytes > 100_000) yield 0.6;
-                    if (sizeBytes > 50_000)  yield 0.4;
-                }
+                if (sizeBytes > 100_000) yield 0.6;
+                if (sizeBytes > 50_000)  yield 0.4;
                 yield 0.2;
             }
-            case FONT -> 0.3;
-            case STYLE -> 0.25;
-            default -> 0.1;
+            case FONT   -> 0.3;
+            case STYLE  -> 0.25;
+            default     -> 0.1;
         };
     }
 
@@ -114,23 +102,25 @@ public class CarbonCalculatorService {
         return 10.0;
     }
 
+    // ── Inner Class (record ki jagah) ─────────────────────────────
     public static class CarbonEquivalents {
         private final double kmDriven;
         private final double treesNeeded;
         private final double smartphoneCharges;
         private final double googleSearches;
 
-        public CarbonEquivalents(double kmDriven, double treesNeeded,
-                                 double smartphoneCharges, double googleSearches) {
-            this.kmDriven = kmDriven;
-            this.treesNeeded = treesNeeded;
+        public CarbonEquivalents(
+                double kmDriven, double treesNeeded,
+                double smartphoneCharges, double googleSearches) {
+            this.kmDriven          = kmDriven;
+            this.treesNeeded       = treesNeeded;
             this.smartphoneCharges = smartphoneCharges;
-            this.googleSearches = googleSearches;
+            this.googleSearches    = googleSearches;
         }
 
-        public double kmDriven() { return kmDriven; }
-        public double treesNeeded() { return treesNeeded; }
+        public double kmDriven()          { return kmDriven; }
+        public double treesNeeded()       { return treesNeeded; }
         public double smartphoneCharges() { return smartphoneCharges; }
-        public double googleSearches() { return googleSearches; }
+        public double googleSearches()    { return googleSearches; }
     }
 }
