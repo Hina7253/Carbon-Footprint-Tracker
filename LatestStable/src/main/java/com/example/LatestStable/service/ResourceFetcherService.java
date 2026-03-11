@@ -3,8 +3,6 @@ package com.example.LatestStable.service;
 import com.example.LatestStable.model.PageResources;
 import com.example.LatestStable.model.ResourceType;
 import com.example.LatestStable.model.WebsiteAnalysis;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -14,16 +12,18 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-@RequiredArgsConstructor
 public class ResourceFetcherService {
+
     private static final org.slf4j.Logger log =
             org.slf4j.LoggerFactory.getLogger(ResourceFetcherService.class);
 
     private final OkHttpClient okHttpClient;
     private final CarbonCalculatorService carbonCalculatorService;
 
-    public ResourceFetcherService(OkHttpClient okHttpClient, CarbonCalculatorService carbonCalculatorService) {
-        this.okHttpClient = okHttpClient;
+    public ResourceFetcherService(
+            OkHttpClient okHttpClient,
+            CarbonCalculatorService carbonCalculatorService) {
+        this.okHttpClient          = okHttpClient;
         this.carbonCalculatorService = carbonCalculatorService;
     }
 
@@ -51,19 +51,22 @@ public class ResourceFetcherService {
                             "Mozilla/5.0 (compatible; CarbonScopeBot/1.0)")
                     .build();
 
-            try (Response response = okHttpClient.newCall(request).execute()) {
+            try (Response response =
+                         okHttpClient.newCall(request).execute()) {
 
                 resource.setHttpStatus(response.code());
 
-                String contentLength = response.header("Content-Length");
+                String contentLength =
+                        response.header("Content-Length");
                 if (contentLength != null) {
                     long sizeBytes = Long.parseLong(contentLength);
                     resource.setSizeBytes(sizeBytes);
 
-                    double co2 = carbonCalculatorService.calculateResourceCo2(
-                            sizeBytes,
-                            resource.getResourceType()
-                    );
+                    double co2 = carbonCalculatorService
+                            .calculateResourceCo2(
+                                    sizeBytes,
+                                    resource.getResourceType()
+                            );
                     resource.setCo2ContributionGrams(co2);
 
                     double potential = carbonCalculatorService
@@ -79,8 +82,7 @@ public class ResourceFetcherService {
                 String contentType = response.header("Content-Type");
                 if (contentType != null) {
                     resource.setContentType(
-                            contentType.split(";")[0].trim()
-                    );
+                            contentType.split(";")[0].trim());
                 }
 
                 String cacheControl = response.header("Cache-Control");
@@ -92,7 +94,7 @@ public class ResourceFetcherService {
             }
 
         } catch (Exception e) {
-            log.debug("Could not fetch resource: {} - {}",
+            log.debug("Could not fetch: {} - {}",
                     resourceUrl, e.getMessage());
             resource.setHttpStatus(0);
         }
