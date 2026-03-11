@@ -1,4 +1,3 @@
-// java
 package com.example.LatestStable.config;
 
 import okhttp3.OkHttpClient;
@@ -41,7 +40,7 @@ public class AppConfig {
         executor.setCorePoolSize(5);
         executor.setMaxPoolSize(20);
         executor.setQueueCapacity(100);
-        executor.setThreadNamePrefix("carbonscope-async-");
+        executor.setThreadNamePrefix("carbonscope-");
         executor.initialize();
         return executor;
     }
@@ -49,22 +48,20 @@ public class AppConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-
         config.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",
                 "http://localhost:5173",
-                "http://localhost:4200",
-                "https://carbonscope.app"
+                "http://localhost:4200"
         ));
-
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(
+                Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
         config.setMaxAge(3600L);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
-
         return new CorsFilter(source);
     }
 
@@ -73,5 +70,16 @@ public class AppConfig {
         return new CarbonConstants(kwhPerGb, gramsCo2PerKwh);
     }
 
-    public record CarbonConstants(double kwhPerGb, double gramsCo2PerKwh) {}
+    public static class CarbonConstants {
+        private final double kwhPerGb;
+        private final double gramsCo2PerKwh;
+
+        public CarbonConstants(double kwhPerGb, double gramsCo2PerKwh) {
+            this.kwhPerGb        = kwhPerGb;
+            this.gramsCo2PerKwh  = gramsCo2PerKwh;
+        }
+
+        public double kwhPerGb()       { return kwhPerGb; }
+        public double gramsCo2PerKwh() { return gramsCo2PerKwh; }
+    }
 }
