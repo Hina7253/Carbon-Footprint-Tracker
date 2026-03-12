@@ -8,4 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/analyses")
 @CrossOrigin(origins = "*")
 public class AnalysisController {
+    private static final org.slf4j.Logger log =
+            org.slf4j.LoggerFactory.getLogger(AnalysisController.class);
 }
