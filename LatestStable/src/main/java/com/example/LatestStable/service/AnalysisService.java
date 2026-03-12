@@ -8,8 +8,7 @@ import com.example.LatestStable.model.WebsiteAnalysis;
 import com.example.LatestStable.model.WebsiteAnalysis.AnalysisStatus;
 import com.example.LatestStable.repository.PageResourcesRepository;
 import com.example.LatestStable.repository.WebsiteAnalysisRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
