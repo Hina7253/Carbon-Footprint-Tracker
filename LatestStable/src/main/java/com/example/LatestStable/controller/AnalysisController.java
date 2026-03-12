@@ -1,13 +1,15 @@
 package com.example.LatestStable.controller;
 
+import com.example.LatestStable.dto.AnalysisRequestDTO;
+import com.example.LatestStable.dto.AnalysisResponseDTO;
 import com.example.LatestStable.service.AnalysisService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/analyses")
@@ -41,6 +43,23 @@ public class AnalysisController {
             error.put("message", e.getMessage());
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(error);
+        }
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getAnalysis(@PathVariable Long id) {
+
+        try {
+            AnalysisResponseDTO response =
+                    analysisService.getAnalysis(id);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Not found");
+            error.put("message", e.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
                     .body(error);
         }
     }
