@@ -74,5 +74,13 @@ public class AnalysisController {
         return ResponseEntity.ok(history);
     }
     // ── GET /analyses/health
+    @GetMapping("/health")
+    public ResponseEntity<Map<String, String>> health() {
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "UP");
+        response.put("service", "Carbon Scope API");
+        return ResponseEntity.ok(response);
+    }
+}
 
 }
