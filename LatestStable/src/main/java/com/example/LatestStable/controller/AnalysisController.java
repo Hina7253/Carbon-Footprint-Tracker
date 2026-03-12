@@ -22,6 +22,7 @@ public class AnalysisController {
     public AnalysisController(AnalysisService analysisService) {
         this.analysisService = analysisService;
     }
+    // ── POST /analyses ────
     @PostMapping
     public ResponseEntity<?> startAnalysis(
             @Valid @RequestBody AnalysisRequestDTO request) {
@@ -46,6 +47,7 @@ public class AnalysisController {
                     .body(error);
         }
     }
+    // ── GET /analyses/{id} ──
     @GetMapping("/{id}")
     public ResponseEntity<?> getAnalysis(@PathVariable Long id) {
 
