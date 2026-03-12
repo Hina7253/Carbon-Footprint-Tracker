@@ -65,5 +65,6 @@ public class AnalysisController {
                     .body(error);
         }
     }
+    // ── GET /analyses/history ─
 
 }
