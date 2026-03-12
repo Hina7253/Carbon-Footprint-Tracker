@@ -1,8 +1,11 @@
 package com.example.LatestStable.service;
 
+import com.example.LatestStable.model.PageResources;
 import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class AiSuggestionService {
@@ -19,26 +22,34 @@ public class AiSuggestionService {
         this.httpClient = httpClient;
     }
     // MAIN METHOD FOR GENERATE AI SUGGESTION
-    if ("no-key".equals(openAiApiKey) ||
-    openAiApiKey == null ||
-            openAiApiKey.isBlank()) {
-        log.info("No OpenAI key — using rule-based suggestions");
-        return generateRuleBasedSuggestions(
-                websiteUrl, co2PerVisitGrams,
-                totalBytes, grade, resources);
-    }
+    public String generateSuggestions(
+            String websiteUrl,
+            double co2PerVisitGrams,
+            long totalBytes,
+            String grade,
+            List<PageResources> resources) {
+
+        // Agar API key nahi hai to default suggestions do
+        if ("no-key".equals(openAiApiKey) ||
+                openAiApiKey == null ||
+                openAiApiKey.isBlank()) {
+            log.info("No OpenAI key — using rule-based suggestions");
+            return generateRuleBasedSuggestions(
+                    websiteUrl, co2PerVisitGrams,
+                    totalBytes, grade, resources);
+        }
 
         try {
-        return callOpenAi(websiteUrl, co2PerVisitGrams,
-                totalBytes, grade, resources);
-    } catch (Exception e) {
-        log.error("OpenAI call failed: {}", e.getMessage());
-        // Fallback to rule-based if AI fails
-        return generateRuleBasedSuggestions(
-                websiteUrl, co2PerVisitGrams,
-                totalBytes, grade, resources);
+            return callOpenAi(websiteUrl, co2PerVisitGrams,
+                    totalBytes, grade, resources);
+        } catch (Exception e) {
+            log.error("OpenAI call failed: {}", e.getMessage());
+            // Fallback to rule-based if AI fails
+            return generateRuleBasedSuggestions(
+                    websiteUrl, co2PerVisitGrams,
+                    totalBytes, grade, resources);
+        }
     }
-}
 
 
 }
