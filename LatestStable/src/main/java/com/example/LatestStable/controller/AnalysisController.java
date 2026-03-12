@@ -73,5 +73,6 @@ public class AnalysisController {
                 analysisService.getHistory();
         return ResponseEntity.ok(history);
     }
+    // ── GET /analyses/health
 
 }
