@@ -51,5 +51,13 @@ public class AiSuggestionService {
         }
     }
 
+    // ── OPENAI API CALL ───────────────────────────────────────────
+    private String callOpenAi(
+            String websiteUrl,
+            double co2PerVisitGrams,
+            long totalBytes,
+            String grade,
+            List<PageResources> resources) throws Exception {
+
 
 }
