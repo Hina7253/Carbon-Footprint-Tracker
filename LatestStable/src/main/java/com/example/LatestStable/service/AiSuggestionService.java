@@ -58,6 +58,11 @@ public class AiSuggestionService {
             long totalBytes,
             String grade,
             List<PageResources> resources) throws Exception {
+        // Build prompt for AI
+        String prompt = buildPrompt(
+                websiteUrl, co2PerVisitGrams,
+                totalBytes, grade, resources);
+
 
 
 }
