@@ -63,6 +63,24 @@ public class AiSuggestionService {
                 websiteUrl, co2PerVisitGrams,
                 totalBytes, grade, resources);
 
+        // Build JSON request body manually
+        String requestBody = "{"
+                + "\"model\": \"gpt-4o-mini\","
+                + "\"messages\": ["
+                + "  {\"role\": \"system\", \"content\": "
+                + "\"You are a web performance expert. "
+                + "Give concise, actionable suggestions to reduce "
+                + "a website carbon footprint. "
+                + "Format: numbered list, max 5 points.\"},"
+                + "  {\"role\": \"user\", \"content\": \""
+                + prompt.replace("\"", "\\\"")
+                .replace("\n", "\\n")
+                + "\"}"
+                + "],"
+                + "\"max_tokens\": 500,"
+                + "\"temperature\": 0.7"
+                + "}";
+
 
 
 }
