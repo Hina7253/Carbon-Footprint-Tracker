@@ -122,6 +122,21 @@ public class AiSuggestionService {
             return "Error parsing AI response";
         }
     }
+    // ── RULE-BASED SUGGESTIONS ────────────────────────────────────
+    // OpenAI key nahi hai to ye use hoga
+    // Yahan hum data dekh ke smart suggestions dete hain
+    private String generateRuleBasedSuggestions(
+            String websiteUrl,
+            double co2PerVisitGrams,
+            long totalBytes,
+            String grade,
+            List<PageResources> resources) {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("🌿 Carbon Optimization Suggestions for ")
+                .append(websiteUrl).append("\n\n");
+
+        int tipNumber = 1;
 
 
 
