@@ -203,8 +203,34 @@ public class AiSuggestionService {
             sb.append("   → Lazy load non-critical third-party scripts\n\n");
         }
 
+        // ── Grade-based suggestion ────────────────────────────────
+        sb.append(tipNumber++).append(". ♻️ CACHING STRATEGY\n");
+        sb.append("   → Set Cache-Control headers for static assets\n");
+        sb.append("   → Use a CDN for global content delivery\n");
+        sb.append("   → Enable Brotli/Gzip compression on server\n\n");
 
+        // ── Grade summary ─────────────────────────────────────────
+        sb.append("📊 Current Grade: ").append(grade)
+                .append(" | CO2: ")
+                .append(String.format("%.4f", co2PerVisitGrams))
+                .append("g per visit\n");
 
+        if ("A".equals(grade) || "B".equals(grade)) {
+            sb.append("✅ Great job! Your site is already eco-friendly.");
+        } else if ("C".equals(grade) || "D".equals(grade)) {
+            sb.append("⚠️ Average site. Implement above suggestions");
+            sb.append(" to reach grade A.");
+        } else {
+            sb.append("❌ High carbon site. Priority: reduce image");
+            sb.append(" and JS sizes immediately.");
+        }
 
-
+        return sb.toString();
     }
+
+
+
+
+
+
+}
