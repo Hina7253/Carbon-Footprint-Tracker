@@ -189,6 +189,20 @@ public class AiSuggestionService {
             sb.append("   → Subset fonts to only needed characters\n\n");
         }
 
+        // ── Check third party ─────────────────────────────────────
+        long thirdPartyCount = resources.stream()
+                .filter(PageResources::isThirdParty)
+                .count();
+
+        if (thirdPartyCount > 5) {
+            sb.append(tipNumber++).append(". 🌐 THIRD-PARTY RESOURCES\n");
+            sb.append("   Found ").append(thirdPartyCount)
+                    .append(" third-party resources.\n");
+            sb.append("   → Audit and remove unnecessary trackers\n");
+            sb.append("   → Self-host critical third-party resources\n");
+            sb.append("   → Lazy load non-critical third-party scripts\n\n");
+        }
+
 
 
 
