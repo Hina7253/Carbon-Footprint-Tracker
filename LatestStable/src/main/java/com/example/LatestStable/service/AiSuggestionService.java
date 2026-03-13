@@ -2,6 +2,7 @@ package com.example.LatestStable.service;
 
 import com.example.LatestStable.model.PageResources;
 import okhttp3.OkHttpClient;
+import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -80,6 +81,17 @@ public class AiSuggestionService {
                 + "\"max_tokens\": 500,"
                 + "\"temperature\": 0.7"
                 + "}";
+
+        try (Response response = httpClient.newCall(request).execute()) {
+            if (!response.isSuccessful() || response.body() == null) {
+                throw new RuntimeException(
+                        "OpenAI API error: " + response.code());
+            }
+
+            String responseBody = response.body().string();
+            return extractTextFromOpenAiResponse(responseBody);
+        }
+    }
 
 
 
