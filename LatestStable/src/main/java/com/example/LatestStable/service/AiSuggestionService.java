@@ -92,6 +92,36 @@ public class AiSuggestionService {
             return extractTextFromOpenAiResponse(responseBody);
         }
     }
+    // ── EXTRACT TEXT FROM OPENAI JSON RESPONSE ────────────────────
+    // OpenAI returns: {"choices":[{"message":{"content":"..."}}]}
+    private String extractTextFromOpenAiResponse(String json) {
+        try {
+            // Find "content": "..." in the JSON
+            int contentIndex = json.indexOf("\"content\":");
+            if (contentIndex == -1) return "Could not parse AI response";
+
+            int startQuote = json.indexOf("\"", contentIndex + 10);
+            if (startQuote == -1) return "Could not parse AI response";
+
+            // Find the closing quote (handle escaped quotes)
+            int endQuote = startQuote + 1;
+            while (endQuote < json.length()) {
+                if (json.charAt(endQuote) == '"'
+                        && json.charAt(endQuote - 1) != '\\') {
+                    break;
+                }
+                endQuote++;
+            }
+
+            return json.substring(startQuote + 1, endQuote)
+                    .replace("\\n", "\n")
+                    .replace("\\\"", "\"");
+
+        } catch (Exception e) {
+            log.error("Error parsing OpenAI response: {}", e.getMessage());
+            return "Error parsing AI response";
+        }
+    }
 
 
 
