@@ -175,7 +175,20 @@ public class AiSuggestionService {
             sb.append("   → Enable code splitting and tree-shaking\n");
             sb.append("   → Minify and compress JS bundles\n");
             sb.append("   → Remove unused dependencies\n\n");
+        }// ── Check fonts ───────────────────────────────────────────
+        long fontCount = resources.stream()
+                .filter(r -> r.getResourceType() == ResourceType.FONT)
+                .count();
+
+        if (fontCount > 2) {
+            sb.append(tipNumber++).append(". 🔤 FONT OPTIMIZATION\n");
+            sb.append("   Found ").append(fontCount)
+                    .append(" font files.\n");
+            sb.append("   → Limit to 2 font families maximum\n");
+            sb.append("   → Use font-display: swap\n");
+            sb.append("   → Subset fonts to only needed characters\n\n");
         }
+
 
 
 
