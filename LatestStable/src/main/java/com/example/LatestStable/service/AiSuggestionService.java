@@ -161,7 +161,23 @@ public class AiSuggestionService {
                     .append("loading=\"lazy\" attribute\n");
             sb.append("   → Use responsive images with srcset\n\n");
         }
+        // ── Check scripts ─────────────────────────────────────────
+        long scriptBytes = resources.stream()
+                .filter(r -> r.getResourceType() == ResourceType.SCRIPT
+                        && r.getSizeBytes() != null)
+                .mapToLong(PageResources::getSizeBytes)
+                .sum();
+
+        if (scriptBytes > 200_000) {
+            sb.append(tipNumber++).append(". ⚡ JAVASCRIPT OPTIMIZATION\n");
+            sb.append("   JavaScript totals ")
+                    .append(formatBytes(scriptBytes)).append(".\n");
+            sb.append("   → Enable code splitting and tree-shaking\n");
+            sb.append("   → Minify and compress JS bundles\n");
+            sb.append("   → Remove unused dependencies\n\n");
+        }
 
 
 
-}
+
+    }
