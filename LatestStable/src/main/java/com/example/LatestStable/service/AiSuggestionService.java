@@ -1,6 +1,7 @@
 package com.example.LatestStable.service;
 
 import com.example.LatestStable.model.PageResources;
+import com.example.LatestStable.model.ResourceType;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Value;
@@ -137,6 +138,29 @@ public class AiSuggestionService {
                 .append(websiteUrl).append("\n\n");
 
         int tipNumber = 1;
+
+        // ── Check images ──────────────────────────────────────────
+        long imageBytes = resources.stream()
+                .filter(r -> r.getResourceType() == ResourceType.IMAGE
+                        && r.getSizeBytes() != null)
+                .mapToLong(PageResources::getSizeBytes)
+                .sum();
+
+        long imageCount = resources.stream()
+                .filter(r -> r.getResourceType() == ResourceType.IMAGE)
+                .count();
+
+        if (imageBytes > 500_000) {
+            sb.append(tipNumber++).append(". 🖼️ IMAGE OPTIMIZATION\n");
+            sb.append("   Found ").append(imageCount)
+                    .append(" images totaling ")
+                    .append(formatBytes(imageBytes)).append(".\n");
+            sb.append("   → Convert images to WebP/AVIF format ")
+                    .append("(saves 30-50%)\n");
+            sb.append("   → Add lazy loading: ")
+                    .append("loading=\"lazy\" attribute\n");
+            sb.append("   → Use responsive images with srcset\n\n");
+        }
 
 
 
