@@ -93,6 +93,11 @@ public class AiSuggestionService {
             return extractTextFromOpenAiResponse(responseBody);
         }
     }
+
+    private String buildPrompt(String websiteUrl, double co2PerVisitGrams, long totalBytes, String grade, List<PageResources> resources) {
+        return null;
+    }
+
     // ── EXTRACT TEXT FROM OPENAI JSON RESPONSE ────────────────────
     // OpenAI returns: {"choices":[{"message":{"content":"..."}}]}
     private String extractTextFromOpenAiResponse(String json) {
