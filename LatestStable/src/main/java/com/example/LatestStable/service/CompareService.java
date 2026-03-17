@@ -57,4 +57,21 @@ public class CompareService {
         return comparison;
     }
 
+    // ── DETERMINE WINNER ──────────────────────────────────────────
+    private String determineWinner(
+            AnalysisResponseDTO r1, AnalysisResponseDTO r2) {
+
+        Double co2Site1 = getCo2(r1);
+        Double co2Site2 = getCo2(r2);
+
+        if (co2Site1 == null && co2Site2 == null) return "tie";
+        if (co2Site1 == null) return r2.getWebsiteUrl();
+        if (co2Site2 == null) return r1.getWebsiteUrl();
+
+        if (co2Site1 < co2Site2) return r1.getWebsiteUrl();
+        if (co2Site2 < co2Site1) return r2.getWebsiteUrl();
+        return "tie";
+    }
+
+
 }
