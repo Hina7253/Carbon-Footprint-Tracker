@@ -2,17 +2,22 @@ package com.example.LatestStable.service;
 
 import com.example.LatestStable.model.PageResources;
 import com.example.LatestStable.model.ResourceType;
-import okhttp3.OkHttpClient;
-import okhttp3.Response;
+import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+// Ye service OpenAI ko direct HTTP call karta hai
+// Spring AI use nahi kiya — dependency problems avoid karne ke liye
 @Service
 public class AiSuggestionService {
+
     private static final org.slf4j.Logger log =
             org.slf4j.LoggerFactory.getLogger(AiSuggestionService.class);
+
     private final OkHttpClient httpClient;
 
     // application.properties se API key read karega
@@ -23,7 +28,8 @@ public class AiSuggestionService {
     public AiSuggestionService(OkHttpClient httpClient) {
         this.httpClient = httpClient;
     }
-    // MAIN METHOD FOR GENERATE AI SUGGESTION
+
+    // ── MAIN METHOD: AI Suggestions Generate Karo ─────────────────
     public String generateSuggestions(
             String websiteUrl,
             double co2PerVisitGrams,
@@ -60,6 +66,7 @@ public class AiSuggestionService {
             long totalBytes,
             String grade,
             List<PageResources> resources) throws Exception {
+
         // Build prompt for AI
         String prompt = buildPrompt(
                 websiteUrl, co2PerVisitGrams,
@@ -83,6 +90,16 @@ public class AiSuggestionService {
                 + "\"temperature\": 0.7"
                 + "}";
 
+        Request request = new Request.Builder()
+                .url("https://api.openai.com/v1/chat/completions")
+                .post(RequestBody.create(
+                        requestBody,
+                        MediaType.parse("application/json")
+                ))
+                .addHeader("Authorization", "Bearer " + openAiApiKey)
+                .addHeader("Content-Type", "application/json")
+                .build();
+
         try (Response response = httpClient.newCall(request).execute()) {
             if (!response.isSuccessful() || response.body() == null) {
                 throw new RuntimeException(
@@ -94,12 +111,9 @@ public class AiSuggestionService {
         }
     }
 
-    private String buildPrompt(String websiteUrl, double co2PerVisitGrams, long totalBytes, String grade, List<PageResources> resources) {
-        return null;
-    }
-
     // ── EXTRACT TEXT FROM OPENAI JSON RESPONSE ────────────────────
     // OpenAI returns: {"choices":[{"message":{"content":"..."}}]}
+    // Hum manually parse karte hain bina extra library ke
     private String extractTextFromOpenAiResponse(String json) {
         try {
             // Find "content": "..." in the JSON
@@ -128,6 +142,67 @@ public class AiSuggestionService {
             return "Error parsing AI response";
         }
     }
+
+    // ── BUILD PROMPT ──────────────────────────────────────────────
+    // AI ko context dete hain — website ki details
+    private String buildPrompt(
+            String websiteUrl,
+            double co2PerVisitGrams,
+            long totalBytes,
+            String grade,
+            List<PageResources> resources) {
+
+        // Resource breakdown by type
+        Map<ResourceType, Long> sizeByType = resources.stream()
+                .filter(r -> r.getSizeBytes() != null)
+                .collect(Collectors.groupingBy(
+                        PageResources::getResourceType,
+                        Collectors.summingLong(PageResources::getSizeBytes)
+                ));
+
+        // Top 3 heaviest resources
+        String heaviest = resources.stream()
+                .filter(r -> r.getSizeBytes() != null)
+                .sorted((a, b) -> Long.compare(
+                        b.getSizeBytes(), a.getSizeBytes()))
+                .limit(3)
+                .map(r -> r.getResourceType() + ": "
+                        + formatBytes(r.getSizeBytes())
+                        + " (" + r.getResourceUrl()
+                        .substring(Math.max(0,
+                                r.getResourceUrl().length() - 50))
+                        + ")")
+                .collect(Collectors.joining(", "));
+
+        // Third party count
+        long thirdPartyCount = resources.stream()
+                .filter(PageResources::isThirdParty)
+                .count();
+
+        return String.format(
+                "Website: %s\n" +
+                        "Carbon Grade: %s\n" +
+                        "CO2 per visit: %.4f grams\n" +
+                        "Total page size: %s\n" +
+                        "Total resources: %d\n" +
+                        "Third-party resources: %d\n" +
+                        "Heaviest resources: %s\n" +
+                        "Resource breakdown: %s\n\n" +
+                        "Please provide 5 specific optimization suggestions " +
+                        "to reduce this website's carbon footprint.",
+                websiteUrl,
+                grade,
+                co2PerVisitGrams,
+                formatBytes(totalBytes),
+                resources.size(),
+                thirdPartyCount,
+                heaviest.isEmpty() ? "none found" : heaviest,
+                sizeByType.entrySet().stream()
+                        .map(e -> e.getKey() + "=" + formatBytes(e.getValue()))
+                        .collect(Collectors.joining(", "))
+        );
+    }
+
     // ── RULE-BASED SUGGESTIONS ────────────────────────────────────
     // OpenAI key nahi hai to ye use hoga
     // Yahan hum data dekh ke smart suggestions dete hain
@@ -166,6 +241,7 @@ public class AiSuggestionService {
                     .append("loading=\"lazy\" attribute\n");
             sb.append("   → Use responsive images with srcset\n\n");
         }
+
         // ── Check scripts ─────────────────────────────────────────
         long scriptBytes = resources.stream()
                 .filter(r -> r.getResourceType() == ResourceType.SCRIPT
@@ -180,7 +256,9 @@ public class AiSuggestionService {
             sb.append("   → Enable code splitting and tree-shaking\n");
             sb.append("   → Minify and compress JS bundles\n");
             sb.append("   → Remove unused dependencies\n\n");
-        }// ── Check fonts ───────────────────────────────────────────
+        }
+
+        // ── Check fonts ───────────────────────────────────────────
         long fontCount = resources.stream()
                 .filter(r -> r.getResourceType() == ResourceType.FONT)
                 .count();
@@ -240,10 +318,4 @@ public class AiSuggestionService {
             return String.format("%.1f KB", bytes / 1024.0);
         return String.format("%.1f MB", bytes / (1024.0 * 1024));
     }
-
-
-
-
-
-
 }
