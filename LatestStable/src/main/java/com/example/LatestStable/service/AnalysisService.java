@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 
 public class AnalysisService {
+    private final AiSuggestionService aiSuggestionService;
     private static final org.slf4j.Logger log =
             org.slf4j.LoggerFactory.getLogger(AnalysisService.class);
 
@@ -29,10 +30,11 @@ public class AnalysisService {
     private final CarbonCalculatorService carbonCalculatorService;
 
     public AnalysisService(
-            WebsiteAnalysisRepository analysisRepository,
+            AiSuggestionService aiSuggestionService, WebsiteAnalysisRepository analysisRepository,
             PageResourcesRepository resourceRepository,
             WebCrawlerService crawlerService,
             CarbonCalculatorService carbonCalculatorService) {
+        this.aiSuggestionService = aiSuggestionService;
         this.analysisRepository = analysisRepository;
         this.resourceRepository = resourceRepository;
         this.crawlerService = crawlerService;
