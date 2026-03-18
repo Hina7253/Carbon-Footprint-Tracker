@@ -101,5 +101,23 @@ public class CompareService {
                     Math.round(percentage * 100.0) / 100.0);
         }
 
+        // Grade comparison
+        diff.put("grade1", r1.getGrade());
+        diff.put("grade2", r2.getGrade());
+
+        // Size comparison
+        Long bytes1 = getBytes(r1);
+        Long bytes2 = getBytes(r2);
+
+        if (bytes1 != null && bytes2 != null) {
+            diff.put("sizeDifferenceBytes",
+                    Math.abs(bytes1 - bytes2));
+            diff.put("lighterSite", bytes1 < bytes2
+                    ? r1.getWebsiteUrl() : r2.getWebsiteUrl());
+        }
+
+        return diff;
+    }
+
 
 }
