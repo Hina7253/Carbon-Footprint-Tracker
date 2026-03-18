@@ -174,6 +174,13 @@ public class IndustryCompareService {
         java.util.List<Map<String, Object>> chart =
                 new java.util.ArrayList<>();
 
+        // Add current website
+        Map<String, Object> siteEntry = new HashMap<>();
+        siteEntry.put("name",   "Your Site");
+        siteEntry.put("co2",    websiteCo2);
+        siteEntry.put("isYours", true);
+        chart.add(siteEntry);
+
 
 
     }
