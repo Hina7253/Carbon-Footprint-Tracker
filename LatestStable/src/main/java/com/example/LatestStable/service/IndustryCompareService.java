@@ -190,6 +190,15 @@ public class IndustryCompareService {
             chart.add(entry);
         });
 
+        // Sort by CO2
+        chart.sort((a, b) ->
+                Double.compare(
+                        (Double) a.get("co2"),
+                        (Double) b.get("co2")));
+
+        return chart;
+    }
+
 
 
     }
