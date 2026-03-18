@@ -134,4 +134,9 @@ public class IndustryCompareService {
         return result;
     }
 
+    // ── AVAILABLE INDUSTRIES ──────────────────────────────────────
+    public java.util.List<String> getAvailableIndustries() {
+        return new java.util.ArrayList<>(BENCHMARKS.keySet());
+    }
+
 }
