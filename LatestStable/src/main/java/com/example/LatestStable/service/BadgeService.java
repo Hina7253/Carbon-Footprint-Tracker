@@ -95,4 +95,33 @@ public class BadgeService {
             """.formatted(color, color, grade,
                 label, co2, emoji);
     }
+
+    // ── NOT ANALYZED BADGE ────────────────────────────────────────
+    private String generateNotAnalyzedBadge(String websiteUrl) {
+        return """
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="200" height="60"
+                 viewBox="0 0 200 60">
+              <rect width="200" height="60" rx="8"
+                    fill="#f8f9fa" stroke="#dee2e6"
+                    stroke-width="1"/>
+              <rect width="70" height="60" rx="8"
+                    fill="#6c757d"/>
+              <rect x="62" width="8" height="60"
+                    fill="#6c757d"/>
+              <text x="35" y="37"
+                    font-family="Arial,sans-serif"
+                    font-size="20" font-weight="bold"
+                    fill="white" text-anchor="middle">?</text>
+              <text x="135" y="25"
+                    font-family="Arial,sans-serif"
+                    font-size="11" fill="#495057"
+                    text-anchor="middle">Not Analyzed Yet</text>
+              <text x="135" y="45"
+                    font-family="Arial,sans-serif"
+                    font-size="9" fill="#6c757d"
+                    text-anchor="middle">🌿 Carbon Scope</text>
+            </svg>
+            """;
+    }
 }
