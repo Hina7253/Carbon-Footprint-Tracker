@@ -119,4 +119,19 @@ public class IndustryCompareService {
 
         return result;
     }
+
+    // ── ALL INDUSTRIES LIST ───────────────────────────────────────
+    public Map<String, Object> getAllIndustries() {
+        Map<String, Object> result = new HashMap<>();
+        BENCHMARKS.forEach((key, benchmark) -> {
+            Map<String, Object> entry = new HashMap<>();
+            entry.put("name",       benchmark.name());
+            entry.put("avgCo2",     benchmark.avgCo2Grams());
+            entry.put("avgBytes",   benchmark.avgBytes());
+            entry.put("examples",   benchmark.examples());
+            result.put(key, entry);
+        });
+        return result;
+    }
+
 }
