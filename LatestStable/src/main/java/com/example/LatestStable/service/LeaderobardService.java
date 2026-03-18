@@ -74,5 +74,29 @@ public class LeaderobardService {
                 .orElse(0.0);
     }
 
+    // ── BUILD LEADERBOARD ENTRY ───────────────────────────────────
+    private Map<String, Object> buildLeaderboardEntry(
+            WebsiteAnalysis analysis) {
+
+        Map<String, Object> entry = new HashMap<>();
+        entry.put("websiteUrl",      analysis.getWebsiteUrl());
+        entry.put("grade",           analysis.getGrade());
+        entry.put("co2PerVisitGrams",analysis.getCo2PerVisitGrams());
+        entry.put("co2YearlyKg",     analysis.getCo2YearlyKg());
+        entry.put("totalBytes",      analysis.getTotalTransferBytes());
+        entry.put("analyzedAt",      analysis.getCompletedAt());
+        entry.put("performanceCategory",
+                getCategory(analysis.getCo2PerVisitGrams()));
+
+        return entry;
+    }
+
+    private String getCategory(Double co2) {
+        if (co2 == null)    return "Unknown";
+        if (co2 < 0.185)    return "Clean 🌿";
+        if (co2 < 0.490)    return "Average ⚡";
+        return "Dirty 🔥";
+    }
+
 
 }
