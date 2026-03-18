@@ -197,6 +197,13 @@ public class IndustryCompareService {
                         (Double) b.get("co2")));
 
         return chart;
+        // ── RECORD: Industry Benchmark ────────────────────────────────
+        private record IndustryBenchmark(
+                String name,
+                double avgCo2Grams,
+                long avgBytes,
+                String examples
+        ) {}
     }
 
 
