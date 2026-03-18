@@ -9,14 +9,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class LeaderobardService {
+public class LeaderoboardService {
     private static final org.slf4j.Logger log =
             org.slf4j.LoggerFactory.getLogger(LeaderboardService.class);
 
-    private final WebsiteAnalysisRepository analysisRepository;
+    private WebsiteAnalysisRepository analysisRepository;
 
-    public LeaderboardService(
+    public void LeaderboardService(
             WebsiteAnalysisRepository analysisRepository) {
+        this.analysisRepository = analysisRepository;
+    }
+
+    public LeaderoboardService(WebsiteAnalysisRepository analysisRepository) {
         this.analysisRepository = analysisRepository;
     }
 
