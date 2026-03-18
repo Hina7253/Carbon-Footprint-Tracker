@@ -124,4 +124,18 @@ public class BadgeService {
             </svg>
             """;
     }
+
+    // ── BADGE COLOR BY GRADE ──────────────────────────────────────
+    private String getBadgeColor(String grade) {
+        return switch (grade) {
+            case "A" -> "#2d6a4f"; // Dark green
+            case "B" -> "#52b788"; // Light green
+            case "C" -> "#f4a261"; // Orange
+            case "D" -> "#e76f51"; // Dark orange
+            case "E" -> "#d62828"; // Red
+            case "F" -> "#9d0208"; // Dark red
+            default  -> "#6c757d"; // Grey
+        };
+    }
+
 }
