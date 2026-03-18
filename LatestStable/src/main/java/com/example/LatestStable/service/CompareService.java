@@ -119,5 +119,41 @@ public class CompareService {
         return diff;
     }
 
+    // ── BUILD VERDICT ─────────────────────────────────────────────
+    private String buildVerdict(
+            AnalysisResponseDTO r1, AnalysisResponseDTO r2) {
+
+        Double co2Site1 = getCo2(r1);
+        Double co2Site2 = getCo2(r2);
+
+        if (co2Site1 == null || co2Site2 == null) {
+            return "Could not complete comparison";
+        }
+
+        if (Math.abs(co2Site1 - co2Site2) < 0.001) {
+            return "Both websites have similar carbon footprint!";
+        }
+
+        String cleanerUrl = co2Site1 < co2Site2
+                ? r1.getWebsiteUrl() : r2.getWebsiteUrl();
+        double diff = Math.abs(co2Site1 - co2Site2);
+        double pct = (diff / Math.max(co2Site1, co2Site2)) * 100;
+
+        return String.format(
+                "%s is %.1f%% more eco-friendly (%.4fg vs %.4fg CO2/visit)",
+                cleanerUrl, pct, co2Site1, co2Site2
+        );
+    }
+
+    private Double getCo2(AnalysisResponseDTO r) {
+        if (r == null || r.getCarbonMetrics() == null) return null;
+        return r.getCarbonMetrics().getCo2PerVisitGrams();
+    }
+
+    private Long getBytes(AnalysisResponseDTO r) {
+        if (r == null || r.getResourceSummary() == null) return null;
+        return r.getResourceSummary().getTotalTransferBytes();
+    }
+
 
 }
