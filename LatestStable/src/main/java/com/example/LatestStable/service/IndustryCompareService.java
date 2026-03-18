@@ -181,6 +181,15 @@ public class IndustryCompareService {
         siteEntry.put("isYours", true);
         chart.add(siteEntry);
 
+        // Add all industries
+        BENCHMARKS.forEach((key, benchmark) -> {
+            Map<String, Object> entry = new HashMap<>();
+            entry.put("name",    benchmark.name());
+            entry.put("co2",     benchmark.avgCo2Grams());
+            entry.put("isYours", false);
+            chart.add(entry);
+        });
+
 
 
     }
