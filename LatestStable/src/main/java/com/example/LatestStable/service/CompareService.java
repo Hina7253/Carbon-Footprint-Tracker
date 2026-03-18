@@ -73,5 +73,33 @@ public class CompareService {
         return "tie";
     }
 
+    // ── CALCULATE DIFFERENCE ──────────────────────────────────────
+    private Map<String, Object> calculateDifference(
+            AnalysisResponseDTO r1, AnalysisResponseDTO r2) {
+
+        Map<String, Object> diff = new HashMap<>();
+
+        Double co2Site1 = getCo2(r1);
+        Double co2Site2 = getCo2(r2);
+
+        if (co2Site1 != null && co2Site2 != null) {
+            double diffValue = Math.abs(co2Site1 - co2Site2);
+            double percentage = co2Site1 > 0
+                    ? (diffValue / Math.max(co2Site1, co2Site2)) * 100
+                    : 0;
+
+            diff.put("co2DifferenceGrams",
+                    Math.round(diffValue * 10000.0) / 10000.0);
+            diff.put("percentageDifference",
+                    Math.round(percentage * 100.0) / 100.0);
+
+            // Which site is cleaner and by how much
+            String cleanerSite = co2Site1 < co2Site2
+                    ? r1.getWebsiteUrl() : r2.getWebsiteUrl();
+            diff.put("cleanerSite", cleanerSite);
+            diff.put("percentageCleaner",
+                    Math.round(percentage * 100.0) / 100.0);
+        }
+
 
 }
