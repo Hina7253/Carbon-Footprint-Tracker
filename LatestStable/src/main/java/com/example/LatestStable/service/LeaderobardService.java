@@ -3,7 +3,10 @@ package com.example.LatestStable.service;
 import com.example.LatestStable.model.WebsiteAnalysis;
 import com.example.LatestStable.repository.WebsiteAnalysisRepository;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class LeaderobardService {
     private static final org.slf4j.Logger log =
@@ -31,5 +34,16 @@ public class LeaderobardService {
                 .map(this::buildLeaderboardEntry)
                 .collect(Collectors.toList());
     }
+    // ── TOP 10 DIRTIEST WEBSITES ──────────────────────────────────
+    public List<Map<String, Object>> getDirtiestWebsites() {
+        log.info("Fetching dirtiest websites leaderboard");
+
+        return analysisRepository.findTopPolluters()
+                .stream()
+                .limit(10)
+                .map(this::buildLeaderboardEntry)
+                .collect(Collectors.toList());
+    }
+
 
 }
