@@ -138,4 +138,16 @@ public class BadgeService {
         };
     }
 
+    // ── BADGE EMOJI BY GRADE ──────────────────────────────────────
+    private String getBadgeEmoji(String grade) {
+        return switch (grade) {
+            case "A" -> "🌿";
+            case "B" -> "✅";
+            case "C" -> "⚡";
+            case "D" -> "⚠️";
+            case "E", "F" -> "🔥";
+            default -> "❓";
+        };
+    }
+
 }
