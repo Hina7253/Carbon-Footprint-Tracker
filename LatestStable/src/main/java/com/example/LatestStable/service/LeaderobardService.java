@@ -4,6 +4,7 @@ import com.example.LatestStable.model.WebsiteAnalysis;
 import com.example.LatestStable.repository.WebsiteAnalysisRepository;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -43,6 +44,20 @@ public class LeaderobardService {
                 .limit(10)
                 .map(this::buildLeaderboardEntry)
                 .collect(Collectors.toList());
+    }
+
+    // ── FULL LEADERBOARD ──────────────────────────────────────────
+    public Map<String, Object> getFullLeaderboard() {
+        Map<String, Object> leaderboard = new HashMap<>();
+
+        leaderboard.put("cleanest", getCleanestWebsites());
+        leaderboard.put("dirtiest", getDirtiestWebsites());
+        leaderboard.put("totalAnalyzed",
+                analysisRepository.count());
+        leaderboard.put("averageCo2Grams",
+                calculateAverageCo2());
+
+        return leaderboard;
     }
 
 
