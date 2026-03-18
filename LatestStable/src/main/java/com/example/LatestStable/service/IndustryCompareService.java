@@ -139,4 +139,33 @@ public class IndustryCompareService {
         return new java.util.ArrayList<>(BENCHMARKS.keySet());
     }
 
+    // ── BUILD VERDICT ─────────────────────────────────────────────
+    private String buildIndustryVerdict(
+            String websiteUrl,
+            double co2PerVisitGrams,
+            IndustryBenchmark benchmark,
+            double pctDiff) {
+
+        if (pctDiff > 0) {
+            return String.format(
+                    "✅ %s is %.1f%% more eco-friendly than " +
+                            "the average %s website (%.4fg vs %.4fg CO₂/visit)",
+                    websiteUrl, pctDiff,
+                    benchmark.name(),
+                    co2PerVisitGrams,
+                    benchmark.avgCo2Grams()
+            );
+        } else {
+            return String.format(
+                    "⚠️ %s produces %.1f%% more CO₂ than " +
+                            "the average %s website (%.4fg vs %.4fg CO₂/visit)",
+                    websiteUrl, Math.abs(pctDiff),
+                    benchmark.name(),
+                    co2PerVisitGrams,
+                    benchmark.avgCo2Grams()
+            );
+        }
+    }
+
+
 }
