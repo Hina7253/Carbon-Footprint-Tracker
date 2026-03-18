@@ -1,6 +1,7 @@
 package com.example.LatestStable.service;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class IndustryCompareService {
     private static final org.slf4j.Logger log =
@@ -62,5 +63,60 @@ public class IndustryCompareService {
                 new IndustryBenchmark(
                         "Social Media", 0.95, 4000000L,
                         "Facebook, Instagram, Twitter"));
+    }
+
+    // ── COMPARE WITH INDUSTRY ─────────────────────────────────────
+    public Map<String, Object> compareWithIndustry(
+            String websiteUrl,
+            double co2PerVisitGrams,
+            long totalBytes,
+            String grade,
+            String industry) {
+
+        String industryKey = industry.toLowerCase().trim();
+        IndustryBenchmark benchmark =
+                BENCHMARKS.getOrDefault(industryKey,
+                        BENCHMARKS.get("blog")); // default = blog
+
+        log.info("Comparing {} with industry: {}",
+                websiteUrl, benchmark.name());
+
+        Map<String, Object> result = new HashMap<>();
+
+        // Site data
+        result.put("websiteUrl",       websiteUrl);
+        result.put("websiteGrade",     grade);
+        result.put("websiteCo2Grams",  co2PerVisitGrams);
+        result.put("websiteBytes",     totalBytes);
+
+        // Industry benchmark
+        result.put("industryName",     benchmark.name());
+        result.put("industryExamples", benchmark.examples());
+        result.put("industryCo2Grams", benchmark.avgCo2Grams());
+        result.put("industryAvgBytes", benchmark.avgBytes());
+
+        // Comparison
+        double pctDiff = benchmark.avgCo2Grams() > 0
+                ? ((benchmark.avgCo2Grams() - co2PerVisitGrams)
+                / benchmark.avgCo2Grams()) * 100
+                : 0;
+
+        result.put("percentageBetterThanIndustry",
+                Math.round(pctDiff * 100.0) / 100.0);
+
+        result.put("isBetterThanIndustry",
+                co2PerVisitGrams < benchmark.avgCo2Grams());
+
+        // Verdict
+        result.put("verdict",
+                buildIndustryVerdict(
+                        websiteUrl, co2PerVisitGrams,
+                        benchmark, pctDiff));
+
+        // All industries for comparison chart
+        result.put("allIndustries",
+                getAllIndustriesForChart(co2PerVisitGrams));
+
+        return result;
     }
 }
