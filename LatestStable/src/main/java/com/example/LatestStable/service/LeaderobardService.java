@@ -60,5 +60,19 @@ public class LeaderobardService {
         return leaderboard;
     }
 
+    // ── CALCULATE AVERAGE CO2 ─────────────────────────────────────
+    private double calculateAverageCo2() {
+        List<WebsiteAnalysis> all =
+                analysisRepository.findTopPolluters();
+
+        if (all.isEmpty()) return 0.0;
+
+        return all.stream()
+                .filter(a -> a.getCo2PerVisitGrams() != null)
+                .mapToDouble(WebsiteAnalysis::getCo2PerVisitGrams)
+                .average()
+                .orElse(0.0);
+    }
+
 
 }
