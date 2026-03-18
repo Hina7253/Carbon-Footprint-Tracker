@@ -167,5 +167,13 @@ public class IndustryCompareService {
         }
     }
 
+    // ── ALL INDUSTRIES FOR CHART DATA ─────────────────────────────
+    private java.util.List<Map<String, Object>>
+    getAllIndustriesForChart(double websiteCo2) {
 
-}
+        java.util.List<Map<String, Object>> chart =
+                new java.util.ArrayList<>();
+
+
+
+    }
