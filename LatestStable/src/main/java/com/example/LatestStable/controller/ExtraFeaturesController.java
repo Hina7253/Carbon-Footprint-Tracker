@@ -66,5 +66,13 @@ public class ExtraFeaturesController {
         return ResponseEntity.ok(result);
     }
 
+    // ── GET /analyses/leaderboard ─────────────────────────────────
+    // Full leaderboard — cleanest + dirtiest
+    @GetMapping("/leaderboard")
+    public ResponseEntity<Map<String, Object>> getLeaderboard() {
+        return ResponseEntity.ok(
+                leaderboardService.getFullLeaderboard());
+    }
+
 
 }
