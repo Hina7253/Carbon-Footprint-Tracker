@@ -20,4 +20,15 @@ public class ExtraFeaturesController {
     private final LeaderboardService leaderboardService;
     private final BadgeService badgeService;
     private final IndustryCompareService industryCompareService;
+
+    public ExtraFeaturesController(
+            CompareService compareService,
+            LeaderboardService leaderboardService,
+            BadgeService badgeService,
+            IndustryCompareService industryCompareService) {
+        this.compareService        = compareService;
+        this.leaderboardService    = leaderboardService;
+        this.badgeService          = badgeService;
+        this.industryCompareService = industryCompareService;
+    }
 }
