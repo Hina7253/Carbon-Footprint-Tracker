@@ -114,6 +114,63 @@ public class ExtraFeaturesController {
                 industryCompareService.getAllIndustries());
     }
 
+    // ── POST /analyses/{id}/industry-compare ──────────────────────
+    // Kisi analysis ko industry se compare karo
+    @PostMapping("/{id}/industry-compare")
+    public ResponseEntity<?> compareWithIndustry(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> request) {
+
+        String industry = request.getOrDefault(
+                "industry", "blog");
+
+        try {
+            // Get analysis data from repository via service
+            // We pass the required data directly
+            Map<String, String> err = new HashMap<>();
+            err.put("info",
+                    "Use /analyses/{id} first to get co2 data," +
+                            " then pass it here");
+            err.put("example",
+                    "{ \"industry\": \"ecommerce\"," +
+                            " \"co2\": \"0.45\"," +
+                            " \"bytes\": \"2000000\"," +
+                            " \"grade\": \"C\"," +
+                            " \"url\": \"example.com\" }");
+
+            // If all data provided in body
+            String co2Str = request.get("co2");
+            String bytesStr = request.get("bytes");
+            String grade = request.get("grade");
+            String url = request.get("url");
+
+            if (co2Str == null) {
+                return ResponseEntity.badRequest().body(err);
+            }
+
+            double co2 = Double.parseDouble(co2Str);
+            long bytes = bytesStr != null
+                    ? Long.parseLong(bytesStr) : 0L;
+
+            Map<String, Object> result =
+                    industryCompareService.compareWithIndustry(
+                            url != null ? url : "website",
+                            co2, bytes,
+                            grade != null ? grade : "C",
+                            industry
+                    );
+
+            return ResponseEntity.ok(result);
+
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity
+                    .internalServerError()
+                    .body(error);
+        }
+    }
+
 
 
 }
