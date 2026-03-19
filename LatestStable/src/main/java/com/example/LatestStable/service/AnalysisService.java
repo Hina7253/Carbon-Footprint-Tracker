@@ -30,15 +30,16 @@ public class AnalysisService {
     private final CarbonCalculatorService carbonCalculatorService;
 
     public AnalysisService(
-            AiSuggestionService aiSuggestionService, WebsiteAnalysisRepository analysisRepository,
+            WebsiteAnalysisRepository analysisRepository,
             PageResourcesRepository resourceRepository,
             WebCrawlerService crawlerService,
-            CarbonCalculatorService carbonCalculatorService) {
-        this.aiSuggestionService = aiSuggestionService;
-        this.analysisRepository = analysisRepository;
-        this.resourceRepository = resourceRepository;
-        this.crawlerService = crawlerService;
+            CarbonCalculatorService carbonCalculatorService,
+            AiSuggestionService aiSuggestionService) {    // ← YE ADD KARO
+        this.analysisRepository    = analysisRepository;
+        this.resourceRepository    = resourceRepository;
+        this.crawlerService        = crawlerService;
         this.carbonCalculatorService = carbonCalculatorService;
+        this.aiSuggestionService   = aiSuggestionService; // ← YE ADD KARO
     }
 
 
