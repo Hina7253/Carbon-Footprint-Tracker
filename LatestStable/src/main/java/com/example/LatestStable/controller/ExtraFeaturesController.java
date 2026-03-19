@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -72,6 +73,14 @@ public class ExtraFeaturesController {
     public ResponseEntity<Map<String, Object>> getLeaderboard() {
         return ResponseEntity.ok(
                 leaderboardService.getFullLeaderboard());
+    }
+
+    // ── GET /analyses/leaderboard/cleanest ────────────────────────
+    @GetMapping("/leaderboard/cleanest")
+    public ResponseEntity<List<Map<String, Object>>>
+    getCleanest() {
+        return ResponseEntity.ok(
+                leaderboardService.getCleanestWebsites());
     }
 
 
