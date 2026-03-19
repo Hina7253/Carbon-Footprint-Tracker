@@ -5,11 +5,9 @@ import com.example.LatestStable.service.BadgeService;
 import com.example.LatestStable.service.CompareService;
 import com.example.LatestStable.service.IndustryCompareService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -46,4 +44,27 @@ public class ExtraFeaturesController {
         String visitsStr = request.getOrDefault(
                 "monthlyVisits", "10000");
 
+        if (url1 == null || url2 == null) {
+            Map<String, String> err = new HashMap<>();
+            err.put("error", "url1 and url2 are required");
+            return ResponseEntity.badRequest().body(err);
+        }
+
+        Long monthlyVisits;
+        try {
+            monthlyVisits = Long.parseLong(visitsStr);
+        } catch (Exception e) {
+            monthlyVisits = 10000L;
+        }
+
+        log.info("Compare request: {} vs {}", url1, url2);
+
+        Map<String, Object> result =
+                compareService.compareTwoWebsites(
+                        url1, url2, monthlyVisits);
+
+        return ResponseEntity.ok(result);
     }
+
+
+}
