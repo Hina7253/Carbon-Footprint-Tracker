@@ -106,6 +106,14 @@ public class ExtraFeaturesController {
                 .body(svg);
     }
 
+    // ── GET /analyses/industries ──────────────────────────────────
+    // Available industries list dekho
+    @GetMapping("/industries")
+    public ResponseEntity<?> getIndustries() {
+        return ResponseEntity.ok(
+                industryCompareService.getAllIndustries());
+    }
+
 
 
 }
