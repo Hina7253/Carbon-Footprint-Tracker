@@ -11,4 +11,12 @@ public class CarbonSavedCalculatorService {
     private final WebsiteAnalysisRepository analysisRepository;
     private final PageResourcesRepository resourceRepository;
     private final CarbonCalculatorService carbonCalculatorService;
+
+    private static final org.slf4j.Logger log =
+            org.slf4j.LoggerFactory.getLogger(
+                    CarbonSavedCalculatorService.class);
+
+    private final WebsiteAnalysisRepository analysisRepository;
+    private final PageResourcesRepository resourceRepository;
+    private final CarbonCalculatorService carbonCalculatorService;
 }
