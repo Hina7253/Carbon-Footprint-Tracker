@@ -104,6 +104,14 @@ public class AnalysisService {
             analysis.setCo2YearlyKg(co2Yearly);
             analysis.setEnergyUsageKwh(energyKwh);
             analysis.setGrade(grade);
+            String aiSuggestions = aiSuggestionService.generateSuggestions(
+                    request.getNormalizedUrl(),
+                    co2PerVisit,
+                    totalBytes,
+                    grade,
+                    resources
+            );
+            analysis.setAiSuggestions(aiSuggestions);
             analysis.setStatus(AnalysisStatus.COMPLETED);
             analysis.setCompletedAt(LocalDateTime.now());
             analysis.setResources(resources);
