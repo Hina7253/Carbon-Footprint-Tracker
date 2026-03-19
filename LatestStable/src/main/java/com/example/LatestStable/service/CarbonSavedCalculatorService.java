@@ -9,6 +9,7 @@ import com.example.LatestStable.repository.WebsiteAnalysisRepository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class CarbonSavedCalculatorService {
 
@@ -158,6 +159,38 @@ public class CarbonSavedCalculatorService {
             case API_CALL -> 0.20; // Caching
             default     -> 0.10;
         };
+    }
+
+    // ── BUILD PER-RESOURCE SAVINGS ────────────────────────────────
+    private List<Map<String, Object>> buildResourceSavings(
+            List<PageResources> resources) {
+
+        return resources.stream()
+                .filter(r -> r.getSizeBytes() != null
+                        && r.getSizeBytes() > 10000) // Only > 10KB
+                .map(r -> {
+                    long size = r.getSizeBytes();
+                    double factor = getReductionFactor(
+                            r.getResourceType(), size);
+                    long saved = (long)(size * factor);
+
+                    Map<String, Object> entry = new HashMap<>();
+                    entry.put("url",          shortenUrl(r.getResourceUrl()));
+                    entry.put("type",         r.getResourceType());
+                    entry.put("currentSize",  formatBytes(size));
+                    entry.put("savedSize",    formatBytes(saved));
+                    entry.put("savingPct",    (int)(factor * 100) + "%");
+                    entry.put("action",       getAction(r.getResourceType()));
+                    return entry;
+                })
+                .sorted((a, b) -> {
+                    // Sort by saved size (largest saving first)
+                    String sa = (String) a.get("savedSize");
+                    String sb2 = (String) b.get("savedSize");
+                    return sb2.compareTo(sa);
+                })
+                .limit(10) // Top 10 optimizations
+                .collect(Collectors.toList());
     }
 
 }
