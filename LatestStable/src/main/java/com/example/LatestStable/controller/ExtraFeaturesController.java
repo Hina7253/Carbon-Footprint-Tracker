@@ -82,6 +82,13 @@ public class ExtraFeaturesController {
         return ResponseEntity.ok(
                 leaderboardService.getCleanestWebsites());
     }
+    // ── GET /analyses/leaderboard/dirtiest ────────────────────────
+    @GetMapping("/leaderboard/dirtiest")
+    public ResponseEntity<List<Map<String, Object>>>
+    getDirtiest() {
+        return ResponseEntity.ok(
+                leaderboardService.getDirtiestWebsites());
+    }
 
 
 }
