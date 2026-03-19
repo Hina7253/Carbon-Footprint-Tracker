@@ -4,6 +4,7 @@ package com.example.LatestStable.controller;
 import com.example.LatestStable.service.BadgeService;
 import com.example.LatestStable.service.CompareService;
 import com.example.LatestStable.service.IndustryCompareService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -89,6 +90,22 @@ public class ExtraFeaturesController {
         return ResponseEntity.ok(
                 leaderboardService.getDirtiestWebsites());
     }
+
+    // ── GET /analyses/badge/{url}
+    @GetMapping(
+            value = "/badge/{websiteUrl}",
+            produces = "image/svg+xml"
+    )
+    public ResponseEntity<String> getBadge(
+            @PathVariable String websiteUrl) {
+
+        String svg = badgeService.generateBadge(websiteUrl);
+        return ResponseEntity.ok()
+                .contentType(MediaType.valueOf("image/svg+xml"))
+                .header("Cache-Control", "max-age=3600")
+                .body(svg);
+    }
+
 
 
 }
