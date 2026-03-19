@@ -1,6 +1,7 @@
 package com.example.LatestStable.service;
 
 import com.example.LatestStable.model.PageResources;
+import com.example.LatestStable.model.ResourceType;
 import com.example.LatestStable.model.WebsiteAnalysis;
 import com.example.LatestStable.repository.PageResourcesRepository;
 import com.example.LatestStable.repository.WebsiteAnalysisRepository;
@@ -133,6 +134,30 @@ public class CarbonSavedCalculatorService {
                     return (long)(size * (1.0 - reduction));
                 })
                 .sum();
+    }
+
+    // ── REDUCTION FACTOR PER TYPE ──
+    private double getReductionFactor(ResourceType type, long size) {
+        return switch (type) {
+            case IMAGE  -> {
+                // WebP conversion saves 30-50%
+                if (size > 500_000) yield 0.60;
+                if (size > 200_000) yield 0.45;
+                if (size > 50_000)  yield 0.30;
+                yield 0.15;
+            }
+            case VIDEO  -> 0.35; // H.265 compression
+            case SCRIPT -> {
+                // Minification + tree shaking
+                if (size > 200_000) yield 0.55;
+                if (size > 50_000)  yield 0.40;
+                yield 0.20;
+            }
+            case STYLE  -> 0.30; // CSS purging + minification
+            case FONT   -> 0.40; // Subsetting + woff2
+            case API_CALL -> 0.20; // Caching
+            default     -> 0.10;
+        };
     }
 
 }
