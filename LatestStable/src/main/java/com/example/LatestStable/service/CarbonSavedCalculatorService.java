@@ -228,5 +228,38 @@ public class CarbonSavedCalculatorService {
                 savedCo2Kg, savedCo2Kg / 0.21);
     }
 
+    // ── ACTION TEXT ───────────────────────────────────────────────
+    private String getAction(ResourceType type) {
+        return switch (type) {
+            case IMAGE  -> "Convert to WebP, add lazy loading";
+            case VIDEO  -> "Re-encode with H.265/HEVC";
+            case SCRIPT -> "Minify + tree-shake bundle";
+            case STYLE  -> "PurgeCSS + minify";
+            case FONT   -> "Subset + use woff2 format";
+            case API_CALL -> "Add response caching";
+            default     -> "Enable compression";
+        };
+    }
+
+    // ── HELPERS ───────────────────────────────────────────────────
+    private String shortenUrl(String url) {
+        if (url == null) return "";
+        return url.length() > 60
+                ? "..." + url.substring(url.length() - 57)
+                : url;
+    }
+
+    private String formatBytes(long bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024)
+            return String.format("%.1f KB", bytes / 1024.0);
+        return String.format("%.1f MB", bytes / (1024.0 * 1024));
+    }
+
+    private Double round(double value) {
+        return Math.round(value * 10000.0) / 10000.0;
+    }
+
 
 }
+
