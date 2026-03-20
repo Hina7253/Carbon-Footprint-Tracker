@@ -192,5 +192,41 @@ public class CarbonSavedCalculatorService {
                 .limit(10) // Top 10 optimizations
                 .collect(Collectors.toList());
     }
+    // ── REAL WORLD EQUIVALENTS ────────────────────────────────────
+    private Map<String, Object> buildSavingsEquivalents(
+            double savedCo2Kg) {
+
+        Map<String, Object> eq = new HashMap<>();
+        eq.put("treesPlanted",
+                round(savedCo2Kg / 21.0));
+        eq.put("kmNotDriven",
+                round(savedCo2Kg / 0.21));
+        eq.put("smartphonesCharged",
+                round(savedCo2Kg / 0.005));
+        eq.put("googleSearchesAvoided",
+                round(savedCo2Kg / 0.0002));
+        eq.put("description",
+                buildSavingsDescription(savedCo2Kg));
+        return eq;
+    }
+
+    private String buildSavingsDescription(double savedCo2Kg) {
+        if (savedCo2Kg <= 0)
+            return "No significant savings identified";
+        if (savedCo2Kg < 1)
+            return String.format(
+                    "Implementing optimizations would save %.0f grams " +
+                            "of CO₂ per year", savedCo2Kg * 1000);
+        if (savedCo2Kg < 10)
+            return String.format(
+                    "Optimizations would save %.2f kg CO₂ per year " +
+                            "— equivalent to planting %.1f trees",
+                    savedCo2Kg, savedCo2Kg / 21.0);
+        return String.format(
+                "Significant savings of %.1f kg CO₂/year — " +
+                        "like taking a car off road for %.0f km!",
+                savedCo2Kg, savedCo2Kg / 0.21);
+    }
+
 
 }
