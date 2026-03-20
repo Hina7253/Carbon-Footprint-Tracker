@@ -9,6 +9,8 @@ import com.example.LatestStable.service.WeeklyTrendService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/analyses")
 @CrossOrigin(origins = "*")
@@ -50,6 +52,12 @@ public class AdvanceFeaturesController {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", e.getMessage()));
         }
+    }
+
+    @GetMapping("/trend/weekly")
+    public ResponseEntity<?> getWeeklyTrend() {
+        return ResponseEntity.ok(
+                trendService.getWeeklyTrend());
     }
 
 }
