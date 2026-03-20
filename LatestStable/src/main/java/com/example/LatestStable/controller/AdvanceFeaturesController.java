@@ -1,6 +1,7 @@
 package com.example.LatestStable.controller;
 
 import com.example.LatestStable.model.PageResources;
+import com.example.LatestStable.model.WebsiteAnalysis;
 import com.example.LatestStable.repository.PageResourcesRepository;
 import com.example.LatestStable.repository.WebsiteAnalysisRepository;
 import com.example.LatestStable.service.AiChatService;
@@ -87,6 +88,28 @@ public class AdvanceFeaturesController {
                             analysis.getWebsiteUrl(),
                             resources,
                             analysis.getGrade()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/{id}/chat")
+    public ResponseEntity<?> chat(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> body) {
+
+        String question = body.get("question");
+
+        if (question == null || question.isBlank()) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error",
+                            "question field is required"));
+        }
+
+        try {
+            return ResponseEntity.ok(
+                    chatService.chat(id, question));
         } catch (Exception e) {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", e.getMessage()));
