@@ -6,9 +6,8 @@ import com.example.LatestStable.service.AiChatService;
 import com.example.LatestStable.service.AiCodeSuggestionService;
 import com.example.LatestStable.service.CarbonSavedCalculatorService;
 import com.example.LatestStable.service.WeeklyTrendService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/analyses")
@@ -39,6 +38,18 @@ public class AdvanceFeaturesController {
         this.chatService         = chatService;
         this.analysisRepository  = analysisRepository;
         this.resourceRepository  = resourceRepository;
+    }
+
+    @GetMapping("/{id}/savings")
+    public ResponseEntity<?> getSavings(
+            @PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(
+                    savingsService.calculatePotentialSavings(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", e.getMessage()));
+        }
     }
 
 }
