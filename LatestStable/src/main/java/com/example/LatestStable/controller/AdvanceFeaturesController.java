@@ -60,4 +60,11 @@ public class AdvanceFeaturesController {
                 trendService.getWeeklyTrend());
     }
 
+    @GetMapping("/trend/url")
+    public ResponseEntity<?> getUrlTrend(
+            @RequestParam String url) {
+        return ResponseEntity.ok(
+                trendService.getUrlTrend(url));
+    }
+
 }
