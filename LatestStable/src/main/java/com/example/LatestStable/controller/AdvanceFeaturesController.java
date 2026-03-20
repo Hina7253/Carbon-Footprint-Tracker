@@ -1,5 +1,6 @@
 package com.example.LatestStable.controller;
 
+import com.example.LatestStable.model.PageResources;
 import com.example.LatestStable.repository.PageResourcesRepository;
 import com.example.LatestStable.repository.WebsiteAnalysisRepository;
 import com.example.LatestStable.service.AiChatService;
@@ -9,6 +10,7 @@ import com.example.LatestStable.service.WeeklyTrendService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -65,6 +67,30 @@ public class AdvanceFeaturesController {
             @RequestParam String url) {
         return ResponseEntity.ok(
                 trendService.getUrlTrend(url));
+    }
+
+    @GetMapping("/{id}/code-fixes")
+    public ResponseEntity<?> getCodeFixes(
+            @PathVariable Long id) {
+        try {
+            WebsiteAnalysis analysis = analysisRepository
+                    .findById(id)
+                    .orElseThrow(() ->
+                            new RuntimeException("Not found: " + id));
+
+            List<PageResources> resources =
+                    resourceRepository
+                            .findByWebsiteAnalysis_IdOrderBySizeBytesDesc(id);
+
+            return ResponseEntity.ok(
+                    codeService.generateCodeFixes(
+                            analysis.getWebsiteUrl(),
+                            resources,
+                            analysis.getGrade()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", e.getMessage()));
+        }
     }
 
 }
