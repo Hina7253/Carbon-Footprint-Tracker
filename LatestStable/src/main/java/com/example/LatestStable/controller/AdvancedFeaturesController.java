@@ -1,24 +1,20 @@
 package com.example.LatestStable.controller;
 
-import com.example.LatestStable.model.PageResources;
-import com.example.LatestStable.model.WebsiteAnalysis;
+import com.example.LatestStable.service.*;
 import com.example.LatestStable.repository.PageResourcesRepository;
 import com.example.LatestStable.repository.WebsiteAnalysisRepository;
-import com.example.LatestStable.service.AiChatService;
-import com.example.LatestStable.service.AiCodeSuggestionService;
-import com.example.LatestStable.service.CarbonSavedCalculatorService;
-import com.example.LatestStable.service.WeeklyTrendService;
+import com.example.LatestStable.model.PageResources;
+import com.example.LatestStable.model.WebsiteAnalysis;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/analyses")
 @CrossOrigin(origins = "*")
+public class AdvancedFeaturesController {
 
-public class AdvanceFeaturesController {
     private static final org.slf4j.Logger log =
             org.slf4j.LoggerFactory.getLogger(
                     AdvancedFeaturesController.class);
@@ -115,5 +111,4 @@ public class AdvanceFeaturesController {
                     .body(Map.of("error", e.getMessage()));
         }
     }
-
 }
