@@ -63,4 +63,39 @@ public class EmailService {
                     "Email failed: " + e.getMessage());
         }
     }
+
+    // ── SEND OPTIMIZATION TIPS ────────────────────────────────────
+    // Weekly optimization tips email
+    public void sendOptimizationTips(
+            Long analysisId, String toEmail) {
+
+        WebsiteAnalysis analysis = analysisRepository
+                .findById(analysisId)
+                .orElseThrow(() ->
+                        new RuntimeException("Analysis not found"));
+
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper =
+                    new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setFrom(fromEmail);
+            helper.setTo(toEmail);
+            helper.setSubject(
+                    "💡 Optimization Tips for " +
+                            analysis.getWebsiteUrl());
+
+            helper.setText(
+                    buildOptimizationEmailHtml(analysis), true);
+
+            mailSender.send(message);
+            log.info("Optimization tips sent to: {}", toEmail);
+
+        } catch (MessagingException e) {
+            log.error("Failed to send tips email: {}",
+                    e.getMessage());
+            throw new RuntimeException(
+                    "Email failed: " + e.getMessage());
+        }
+    }
 }
