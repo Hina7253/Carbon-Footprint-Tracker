@@ -387,4 +387,44 @@ public class EmailService {
             """.formatted(suggestions);
     }
 
+    // ── GRADE HELPERS ─────────────────────────────────────────────
+    private String getGradeColor(String grade) {
+        if (grade == null) return "#6b7280";
+        return switch (grade) {
+            case "A" -> "#16a34a";
+            case "B" -> "#65a30d";
+            case "C" -> "#d97706";
+            case "D" -> "#ea580c";
+            default  -> "#dc2626";
+        };
+    }
+
+    private String getGradeEmoji(String grade) {
+        if (grade == null) return "❓";
+        return switch (grade) {
+            case "A" -> "🌿";
+            case "B" -> "✅";
+            case "C" -> "⚡";
+            case "D" -> "⚠️";
+            default  -> "🔥";
+        };
+    }
+
+    private String getGradeMessage(String grade) {
+        if (grade == null)
+            return "Analysis complete";
+        return switch (grade) {
+            case "A" ->
+                    "Excellent! Your site is very eco-friendly 🎉";
+            case "B" ->
+                    "Good job! Better than most websites";
+            case "C" ->
+                    "Average performance. Room for improvement";
+            case "D" ->
+                    "Below average. Take action to reduce emissions";
+            default  ->
+                    "High carbon site. Urgent optimization needed!";
+        };
+    }
+
 }
