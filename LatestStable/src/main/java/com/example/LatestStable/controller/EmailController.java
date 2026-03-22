@@ -2,6 +2,7 @@ package com.example.LatestStable.controller;
 
 import com.example.LatestStable.service.EmailService;
 import com.example.LatestStable.service.PdfReportService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -79,6 +80,35 @@ public class EmailController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError()
                     .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    // ── GET /analyses/{id}/pdf ────────────────────────────────────
+    // PDF report download karo
+    @GetMapping("/{id}/pdf")
+    public ResponseEntity<byte[]> downloadPdf(
+            @PathVariable Long id) {
+
+        try {
+            byte[] pdfBytes =
+                    pdfReportService.generateReport(id);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData(
+                    "attachment",
+                    "carbon-report-" + id + ".pdf"
+            );
+            headers.setContentLength(pdfBytes.length);
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(pdfBytes);
+
+        } catch (Exception e) {
+            log.error("PDF failed: {}", e.getMessage());
+            return ResponseEntity.internalServerError()
+                    .build();
         }
     }
 
