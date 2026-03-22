@@ -56,4 +56,30 @@ public class EmailController {
         }
     }
 
+    // ── POST /analyses/{id}/send-tips ────────────────────────────
+    // Optimization tips email karo
+    @PostMapping("/{id}/send-tips")
+    public ResponseEntity<?> sendTips(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> body) {
+
+        String email = body.get("email");
+
+        if (email == null || email.isBlank()) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "email is required"));
+        }
+
+        try {
+            emailService.sendOptimizationTips(id, email);
+            return ResponseEntity.ok(Map.of(
+                    "message", "Tips sent to " + email,
+                    "success", true
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError()
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }
+
 }
