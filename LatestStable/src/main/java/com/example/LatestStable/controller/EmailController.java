@@ -27,7 +27,7 @@ public class EmailController {
     }
 
     // ── POST /analyses/{id}/send-report ──────────────────────────
-    // Analysis report email karo
+    // Analysis report email karna
     // Body: { "email": "user@example.com" }
     @PostMapping("/{id}/send-report")
     public ResponseEntity<?> sendReport(
