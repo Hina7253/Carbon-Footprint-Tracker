@@ -363,4 +363,28 @@ public class EmailService {
                 frontendUrl
         );
     }
+
+    // ── SUGGESTIONS SECTION ───────────────────────────────────────
+    private String buildSuggestionsSection(String suggestions) {
+        if (suggestions == null || suggestions.isBlank())
+            return "";
+
+        return """
+            <div style="padding:0 30px 20px;">
+              <h3 style="color:#14532d;">
+                🤖 AI Optimization Suggestions
+              </h3>
+              <div style="background:#f0fdf4;
+                          border-left:4px solid #16a34a;
+                          padding:16px;
+                          border-radius:0 8px 8px 0;
+                          white-space:pre-line;
+                          color:#374151;
+                          font-size:14px;">
+                %s
+              </div>
+            </div>
+            """.formatted(suggestions);
+    }
+
 }
