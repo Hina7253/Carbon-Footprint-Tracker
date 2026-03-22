@@ -2,9 +2,10 @@ package com.example.LatestStable.controller;
 
 import com.example.LatestStable.service.EmailService;
 import com.example.LatestStable.service.PdfReportService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/analyses")
@@ -22,6 +23,37 @@ public class EmailController {
             PdfReportService pdfReportService) {
         this.emailService    = emailService;
         this.pdfReportService = pdfReportService;
+    }
+
+    // ── POST /analyses/{id}/send-report ──────────────────────────
+    // Analysis report email karo
+    // Body: { "email": "user@example.com" }
+    @PostMapping("/{id}/send-report")
+    public ResponseEntity<?> sendReport(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> body) {
+
+        String email = body.get("email");
+
+        if (email == null || email.isBlank()) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "email is required"));
+        }
+
+        try {
+            emailService.sendAnalysisReport(id, email);
+            return ResponseEntity.ok(Map.of(
+                    "message", "Report sent to " + email,
+                    "success", true
+            ));
+        } catch (Exception e) {
+            log.error("Send report failed: {}", e.getMessage());
+            return ResponseEntity.internalServerError()
+                    .body(Map.of(
+                            "error", "Failed to send email",
+                            "message", e.getMessage()
+                    ));
+        }
     }
 
 }
