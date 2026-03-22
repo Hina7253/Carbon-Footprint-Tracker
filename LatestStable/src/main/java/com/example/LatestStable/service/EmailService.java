@@ -105,7 +105,7 @@ public class EmailService {
         }
     }
 
-    / ── BUILD ANALYSIS EMAIL HTML ─────────────────────────────────
+    // ── BUILD ANALYSIS EMAIL HTML ─────────────────────────────────
     private String buildAnalysisEmailHtml(
             WebsiteAnalysis analysis) {
 
