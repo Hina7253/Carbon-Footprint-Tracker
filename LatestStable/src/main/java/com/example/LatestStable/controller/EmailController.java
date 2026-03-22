@@ -58,7 +58,7 @@ public class EmailController {
     }
 
     // ── POST /analyses/{id}/send-tips ────────────────────────────
-    // Optimization tips email karo
+    // Optimization tips email karna
     @PostMapping("/{id}/send-tips")
     public ResponseEntity<?> sendTips(
             @PathVariable Long id,
@@ -84,7 +84,7 @@ public class EmailController {
     }
 
     // ── GET /analyses/{id}/pdf ────────────────────────────────────
-    // PDF report download karo
+    // PDF report download karna
     @GetMapping("/{id}/pdf")
     public ResponseEntity<byte[]> downloadPdf(
             @PathVariable Long id) {
