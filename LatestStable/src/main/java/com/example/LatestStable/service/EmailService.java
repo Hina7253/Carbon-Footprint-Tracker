@@ -295,4 +295,72 @@ public class EmailService {
                 frontendUrl
         );
     }
+
+    // ── BUILD OPTIMIZATION EMAIL ──────────────────────────────────
+    private String buildOptimizationEmailHtml(
+            WebsiteAnalysis analysis) {
+
+        String suggestions = analysis.getAiSuggestions() != null
+                ? analysis.getAiSuggestions()
+                : "No suggestions available";
+
+        return """
+            <!DOCTYPE html>
+            <html>
+            <body style="font-family:Arial,sans-serif;
+                         background:#f0fdf4;
+                         padding:40px 20px;">
+              <div style="max-width:600px;margin:0 auto;
+                          background:white;
+                          border-radius:16px;
+                          overflow:hidden;">
+
+                <div style="background:#14532d;
+                            padding:30px;
+                            text-align:center;">
+                  <h1 style="color:white;margin:0;">
+                    💡 Optimization Tips
+                  </h1>
+                  <p style="color:#86efac;margin:8px 0 0;">
+                    For %s
+                  </p>
+                </div>
+
+                <div style="padding:30px;">
+                  <p style="color:#374151;">
+                    Here are your personalized optimization tips
+                    to reduce the carbon footprint of
+                    <strong>%s</strong>:
+                  </p>
+                  <div style="background:#f0fdf4;
+                              border-left:4px solid #16a34a;
+                              padding:20px;
+                              border-radius:0 8px 8px 0;
+                              white-space:pre-line;
+                              color:#374151;">
+                    %s
+                  </div>
+                </div>
+
+                <div style="padding:20px;text-align:center;">
+                  <a href="%s"
+                     style="background:#16a34a;
+                            color:white;
+                            padding:12px 24px;
+                            border-radius:8px;
+                            text-decoration:none;">
+                    View Full Analysis →
+                  </a>
+                </div>
+
+              </div>
+            </body>
+            </html>
+            """.formatted(
+                analysis.getWebsiteUrl(),
+                analysis.getWebsiteUrl(),
+                suggestions,
+                frontendUrl
+        );
+    }
 }
