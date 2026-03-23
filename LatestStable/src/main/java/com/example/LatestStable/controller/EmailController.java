@@ -2,6 +2,7 @@ package com.example.LatestStable.controller;
 
 import com.example.LatestStable.service.EmailService;
 import com.example.LatestStable.service.PdfReportService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class EmailController {
     }
 
     // ── POST /analyses/{id}/send-report ──────────────────────────
-    // Analysis report email karna
+    // Analysis report email karo
     // Body: { "email": "user@example.com" }
     @PostMapping("/{id}/send-report")
     public ResponseEntity<?> sendReport(
@@ -58,7 +59,7 @@ public class EmailController {
     }
 
     // ── POST /analyses/{id}/send-tips ────────────────────────────
-    // Optimization tips email karna
+    // Optimization tips email karo
     @PostMapping("/{id}/send-tips")
     public ResponseEntity<?> sendTips(
             @PathVariable Long id,
@@ -84,7 +85,7 @@ public class EmailController {
     }
 
     // ── GET /analyses/{id}/pdf ────────────────────────────────────
-    // PDF report download karna
+    // PDF report download karo
     @GetMapping("/{id}/pdf")
     public ResponseEntity<byte[]> downloadPdf(
             @PathVariable Long id) {
@@ -111,5 +112,4 @@ public class EmailController {
                     .build();
         }
     }
-
 }
