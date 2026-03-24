@@ -85,3 +85,7 @@ src/
          └── application.properties
 
 ## Getting Started
+🔧 Prerequisites
+Java 17+
+Maven
+IDE (IntelliJ / VS Code)
