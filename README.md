@@ -53,7 +53,8 @@ This system helps developers build more sustainable and eco-friendly web applica
 ```json
 {
   "url": "https://example.com"
-}
+}```
+
 
 ## Response
 
