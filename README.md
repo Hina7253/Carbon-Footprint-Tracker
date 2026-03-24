@@ -101,3 +101,6 @@ mvn spring-boot:run
 http://localhost:8080/api/analyze
 
 ## Use Cases
+Developers optimizing website performance
+Organizations reducing digital carbon footprint
+Green and sustainable tech initiatives
