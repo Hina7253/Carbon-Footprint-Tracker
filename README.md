@@ -25,3 +25,19 @@ This system helps developers build more sustainable and eco-friendly web applica
 - Maven
 - REST APIs
 - Postman (for testing)
+
+---
+
+## ⚙️ How It Works
+1. User enters a website URL
+2. Backend fetches website data
+3. Analyzes:
+   - Page size
+   - Number of requests
+   - Media content (images, videos)
+   - Scripts and APIs
+4. Calculates:
+   - Total data size
+   - Energy consumption
+   - CO₂ emissions
+5. Returns analysis and optimization suggestions
