@@ -48,3 +48,9 @@ This system helps developers build more sustainable and eco-friendly web applica
 
 ### 🔹 Analyze Website
 **POST** `/api/analyze`
+
+#### Request Body
+```json
+{
+  "url": "https://example.com"
+}
