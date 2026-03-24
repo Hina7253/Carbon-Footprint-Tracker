@@ -54,8 +54,10 @@ This system helps developers build more sustainable and eco-friendly web applica
 {
   "url": "https://example.com"
 }
----
+
 ## Response
+
+```json
 {
   "totalDataSize": "2.5MB",
   "energyConsumption": "0.02 kWh",
@@ -68,8 +70,3 @@ This system helps developers build more sustainable and eco-friendly web applica
     "Minify CSS/JS"
   ]
 }
-
----
-
-
-## 📌 Overview
