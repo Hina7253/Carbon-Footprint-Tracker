@@ -41,3 +41,10 @@ This system helps developers build more sustainable and eco-friendly web applica
    - Energy consumption
    - CO₂ emissions
 5. Returns analysis and optimization suggestions
+
+---
+
+## 📡 API Endpoints
+
+### 🔹 Analyze Website
+**POST** `/api/analyze`
