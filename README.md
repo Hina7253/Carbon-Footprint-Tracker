@@ -106,3 +106,7 @@ Organizations reducing digital carbon footprint
 Green and sustainable tech initiatives
 
 ## 📈 Future Enhancements
+Real-time monitoring
+Dashboard analytics
+Browser extension
+AI-based optimization suggestions
