@@ -99,3 +99,5 @@ mvn spring-boot:run
 
 ## 🧪 Testing
 http://localhost:8080/api/analyze
+
+## Use Cases
