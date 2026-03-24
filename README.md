@@ -1,4 +1,4 @@
-<img width="1859" height="950" alt="image" src="https://github.com/user-attachments/assets/8c6d1b24-dbe9-4d9f-b61b-6dc8a0411cca" /># 🌱 Digital Carbon Footprint Tracker - Backend
+# 🌱 Digital Carbon Footprint Tracker - Backend
 
 ## 📌 Overview
 The Digital Carbon Footprint Tracker Backend is developed using Java and Spring Boot.  
