@@ -96,3 +96,5 @@ cd your-repo-name
 
 ## ▶️ Run the Application
 mvn spring-boot:run
+
+## 🧪 Testing
