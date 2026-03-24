@@ -89,3 +89,5 @@ src/
 Java 17+
 Maven
 IDE (IntelliJ / VS Code)
+
+## 📥 Installation
