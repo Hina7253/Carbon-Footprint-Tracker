@@ -110,3 +110,6 @@ Real-time monitoring
 Dashboard analytics
 Browser extension
 AI-based optimization suggestions
+
+## 🤝 Contributing
+Contributions are welcome! Feel free to fork and submit a pull request.
