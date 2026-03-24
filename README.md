@@ -104,3 +104,5 @@ http://localhost:8080/api/analyze
 Developers optimizing website performance
 Organizations reducing digital carbon footprint
 Green and sustainable tech initiatives
+
+## 📈 Future Enhancements
