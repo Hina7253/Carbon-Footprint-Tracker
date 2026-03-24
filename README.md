@@ -54,3 +54,17 @@ This system helps developers build more sustainable and eco-friendly web applica
 {
   "url": "https://example.com"
 }
+---
+## Response
+{
+  "totalDataSize": "2.5MB",
+  "energyConsumption": "0.02 kWh",
+  "co2EmissionPerVisit": "0.01 g",
+  "yearlyEmission": "3.65 kg",
+  "heavyResources": ["images", "videos"],
+  "suggestions": [
+    "Optimize images",
+    "Use lazy loading",
+    "Minify CSS/JS"
+  ]
+}
