@@ -1,6 +1,7 @@
-🌱 Digital Carbon Footprint Tracker (Backend)
-📌 Overview
+# 🌱 Digital Carbon Footprint Tracker - Backend
 
-The Digital Carbon Footprint Tracker Backend is built using Java Spring Boot and is responsible for analyzing websites to estimate their environmental impact.
+## 📌 Overview
+The Digital Carbon Footprint Tracker Backend is developed using Java and Spring Boot.  
+It analyzes websites to estimate their environmental impact by calculating energy usage and converting it into CO₂ emissions.
 
-It calculates how much energy is consumed when a website loads and converts that into CO₂ emissions, helping developers build more sustainable web applications.
+This system helps developers build more sustainable and eco-friendly web applications.
