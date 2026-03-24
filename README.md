@@ -16,3 +16,12 @@ This system helps developers build more sustainable and eco-friendly web applica
 - Calculate yearly carbon footprint based on traffic
 - Identify heavy resources affecting performance
 - Provide optimization suggestions
+
+  ---
+
+## 🛠️ Tech Stack
+- Java
+- Spring Boot
+- Maven
+- REST APIs
+- Postman (for testing)
