@@ -95,3 +95,4 @@ git clone https://github.com/your-username/your-repo-name.git
 cd your-repo-name
 
 ## ▶️ Run the Application
+mvn spring-boot:run
