@@ -91,8 +91,7 @@ Maven
 IDE (IntelliJ / VS Code)
 
 ## 📥 Installation
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/Hina7253/Carbon-Footprint-Tracker.git
 
 ## ▶️ Run the Application
 mvn spring-boot:run
