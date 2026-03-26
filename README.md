@@ -8,7 +8,7 @@ This system helps developers build more sustainable and eco-friendly web applica
 
 ---
 
-
+## 🚀 Features
 - Analyze any website using URL
 - Calculate total data transfer (images, videos, scripts, APIs)
 - Estimate energy consumption per visit
