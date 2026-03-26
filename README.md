@@ -28,7 +28,7 @@ This system helps developers build more sustainable and eco-friendly web applica
 
 ---
 
-
+## ⚙️ How It Works
 1. User enters a website URL
 2. Backend fetches website data
 3. Analyzes:
