@@ -1,4 +1,4 @@
-# 🌱 Digital Carbon Footprint Tracker - Backend
+
 
 ## 📌 Overview
 The Digital Carbon Footprint Tracker Backend is developed using Java and Spring Boot.  
