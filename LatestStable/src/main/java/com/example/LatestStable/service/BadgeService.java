@@ -2,9 +2,11 @@ package com.example.LatestStable.service;
 
 import com.example.LatestStable.model.WebsiteAnalysis;
 import com.example.LatestStable.repository.WebsiteAnalysisRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class BadgeService {
     private static final org.slf4j.Logger log =
             org.slf4j.LoggerFactory.getLogger(BadgeService.class);

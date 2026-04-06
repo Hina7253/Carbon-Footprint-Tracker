@@ -2,6 +2,7 @@ package com.example.LatestStable.service;
 
 import com.example.LatestStable.model.WebsiteAnalysis;
 import com.example.LatestStable.repository.WebsiteAnalysisRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,7 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class LeaderoboardService {
+@Service
+public class LeaderboardService {
     private static final org.slf4j.Logger log =
             org.slf4j.LoggerFactory.getLogger(LeaderboardService.class);
 
@@ -20,7 +22,7 @@ public class LeaderoboardService {
         this.analysisRepository = analysisRepository;
     }
 
-    public LeaderoboardService(WebsiteAnalysisRepository analysisRepository) {
+    public LeaderboardService(WebsiteAnalysisRepository analysisRepository) {
         this.analysisRepository = analysisRepository;
     }
 

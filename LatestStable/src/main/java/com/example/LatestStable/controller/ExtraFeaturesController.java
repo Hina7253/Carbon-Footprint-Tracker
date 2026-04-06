@@ -4,6 +4,7 @@ package com.example.LatestStable.controller;
 import com.example.LatestStable.service.BadgeService;
 import com.example.LatestStable.service.CompareService;
 import com.example.LatestStable.service.IndustryCompareService;
+import com.example.LatestStable.service.LeaderboardService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

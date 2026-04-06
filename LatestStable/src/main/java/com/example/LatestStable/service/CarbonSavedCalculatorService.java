@@ -5,12 +5,14 @@ import com.example.LatestStable.model.ResourceType;
 import com.example.LatestStable.model.WebsiteAnalysis;
 import com.example.LatestStable.repository.PageResourcesRepository;
 import com.example.LatestStable.repository.WebsiteAnalysisRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Service
 public class CarbonSavedCalculatorService {
 
 

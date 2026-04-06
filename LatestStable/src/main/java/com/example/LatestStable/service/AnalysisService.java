@@ -16,9 +16,9 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
+
 @Service
-
-
 public class AnalysisService {
     private final AiSuggestionService aiSuggestionService;
     private static final org.slf4j.Logger log =

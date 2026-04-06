@@ -2,10 +2,12 @@ package com.example.LatestStable.service;
 
 import com.example.LatestStable.dto.AnalysisRequestDTO;
 import com.example.LatestStable.dto.AnalysisResponseDTO;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
 public class CompareService {
     private static final org.slf4j.Logger log =
             org.slf4j.LoggerFactory.getLogger(CompareService.class);

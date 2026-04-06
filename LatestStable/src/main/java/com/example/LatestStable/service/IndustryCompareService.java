@@ -1,11 +1,14 @@
 // java
 package com.example.LatestStable.service;
 
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class IndustryCompareService {
     private static final org.slf4j.Logger log =
             org.slf4j.LoggerFactory.getLogger(IndustryCompareService.class);
