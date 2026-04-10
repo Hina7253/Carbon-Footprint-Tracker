@@ -1,6 +1,9 @@
 package com.example.LatestStable.model;
 
+
 import jakarta.persistence.*;
+
+
 
 @Entity
 @Table(name = "page_resources")
